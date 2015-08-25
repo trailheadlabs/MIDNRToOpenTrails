@@ -23,7 +23,7 @@ Dependencies
 ============
 
 * Check if you have Python 2.7+ by running `python --version` from a terminal
-* Install Python 2.7+ if not already installed.
+* [Install Python 2.7+][https://www.python.org/downloads/] if not already installed.
 * Run `pip install -r requirements.txt` to install dependent libraries, or you can download and install the individually:
 
  * [pyshp](http://www.lfd.uci.edu/~gohlke/pythonlibs/#pyshp)
