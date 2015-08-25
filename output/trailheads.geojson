@@ -1,0 +1,165 @@
+{
+  "type": "FeatureCollection", 
+  "features": [
+    {
+      "type": "Feature", 
+      "properties": {
+        "id": "THD4", 
+        "steward_id": "000001", 
+        "segment_ids": "TRL11959; TRL11976", 
+        "name": "Anderson Lake Pathway", 
+        "restrooms": "no", 
+        "drinkwater": "no", 
+        "parking": "yes", 
+        "address": "46.2295823210454, -87.4849741351175"
+      }, 
+      "geometry": {
+        "type": "Point", 
+        "coordinates": [
+          -87.48497413511762, 
+          46.22958232104534
+        ]
+      }
+    }, 
+    {
+      "type": "Feature", 
+      "properties": {
+        "id": "THD8", 
+        "steward_id": "000001", 
+        "segment_ids": "TRL2088", 
+        "name": "Blueberry Ridge", 
+        "restrooms": "yes", 
+        "drinkwater": "no", 
+        "parking": "yes", 
+        "address": "46.4607779627694, -87.4243516672884"
+      }, 
+      "geometry": {
+        "type": "Point", 
+        "coordinates": [
+          -87.42435166728855, 
+          46.46077796276934
+        ]
+      }
+    }, 
+    {
+      "type": "Feature", 
+      "properties": {
+        "id": "THD9", 
+        "steward_id": "000001", 
+        "segment_ids": "TRL5477", 
+        "name": "Blueberry Ridge", 
+        "restrooms": "no", 
+        "drinkwater": "no", 
+        "parking": "yes", 
+        "address": "46.4408610046128, -87.412206446458"
+      }, 
+      "geometry": {
+        "type": "Point", 
+        "coordinates": [
+          -87.41220644645813, 
+          46.44086100461278
+        ]
+      }
+    }, 
+    {
+      "type": "Feature", 
+      "properties": {
+        "id": "THD10", 
+        "steward_id": "000001", 
+        "segment_ids": "TRL9560", 
+        "name": "Blueberry Ridge", 
+        "restrooms": "yes", 
+        "drinkwater": "no", 
+        "parking": "yes", 
+        "address": "46.4493020964394, -87.423169959919"
+      }, 
+      "geometry": {
+        "type": "Point", 
+        "coordinates": [
+          -87.42316995991912, 
+          46.449302096439325
+        ]
+      }
+    }, 
+    {
+      "type": "Feature", 
+      "properties": {
+        "id": "THD19", 
+        "steward_id": "000009", 
+        "segment_ids": "TRL1903", 
+        "name": "Little Presque Isle", 
+        "restrooms": "yes", 
+        "drinkwater": "no", 
+        "parking": "yes", 
+        "address": "46.6340131863366, -87.4678551872752"
+      }, 
+      "geometry": {
+        "type": "Point", 
+        "coordinates": [
+          -87.4678551872753, 
+          46.63401318633656
+        ]
+      }
+    }, 
+    {
+      "type": "Feature", 
+      "properties": {
+        "id": "THD20", 
+        "steward_id": "000009", 
+        "segment_ids": "TRL1909", 
+        "name": "Little Presque Isle/Songbird", 
+        "restrooms": "no", 
+        "drinkwater": "no", 
+        "parking": "yes", 
+        "address": "46.6331079218127, -87.4740731276262"
+      }, 
+      "geometry": {
+        "type": "Point", 
+        "coordinates": [
+          -87.47407312762627, 
+          46.633107921812574
+        ]
+      }
+    }, 
+    {
+      "type": "Feature", 
+      "properties": {
+        "id": "THD21", 
+        "steward_id": "000001", 
+        "segment_ids": "TRL1885", 
+        "name": "Little Presque Isle", 
+        "restrooms": "no", 
+        "drinkwater": "no", 
+        "parking": "yes", 
+        "address": "46.6030146430846, -87.4598223805763"
+      }, 
+      "geometry": {
+        "type": "Point", 
+        "coordinates": [
+          -87.4598223805764, 
+          46.60301464308452
+        ]
+      }
+    }, 
+    {
+      "type": "Feature", 
+      "properties": {
+        "id": "THD22", 
+        "steward_id": "000001", 
+        "segment_ids": "TRL2732", 
+        "name": "Little Presque Isle", 
+        "restrooms": "yes", 
+        "drinkwater": "no", 
+        "parking": "yes", 
+        "address": "46.6146934219217, -87.4676121330623"
+      }, 
+      "geometry": {
+        "type": "Point", 
+        "coordinates": [
+          -87.46761213306246, 
+          46.61469342192157
+        ]
+      }
+    }
+  ]
+}

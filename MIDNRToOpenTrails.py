@@ -8,6 +8,10 @@
 # |_____  |_____| |  \_|   \/   |______ |    \_ ______| __|__ |_____| |  \_|
 #
 
+# This is the OpenTrails conversion script for MI DNR to OpenTrails
+
+# Huge thank you to Ben Sainsbury (formerly Oregon Metro) for the initial work done on this script.
+
 # http://www.lfd.uci.edu/~gohlke/pythonlibs/#pyshp
 import shapefile
 
@@ -28,10 +32,18 @@ import csv
 TRAILS_URL = 'http://library.oregonmetro.gov/rlisdiscovery/trails.zip'
 
 WGS84 = pyproj.Proj("+init=EPSG:4326") # LatLon with WGS84 datum used for geojson
-ORSP = pyproj.Proj("+init=EPSG:2913", preserve_units=True) # datum used by Oregon Metro
+MIDNR = pyproj.Proj("+init=EPSG:3078", preserve_units=True) # datum used by Michigan
 
+#OBJECTID,name,id,url,address,publisher,license,phone
+STEWARD_FIELDS = ['OBJECTID', 'name', 'id', 'url', 'address', 'publisher', 'license', 'phone' ]
+MOTOR_VEHICLE_FIELDS = ['AllTerVeh','FourWD','ATV','Motorbike','MCCCT','Snowmobile']
 STEWARDS = []
-ORCA_SITES = {}
+STEWARD_MAP = {}
+NAMED_TRAILS = []
+NAMED_TRAIL_MAP = {}
+NAMED_TRAIL_SEGMENT_ID_MAP = {}
+TRAIL_SEGMENTS = []
+TRAILHEADS = []
 
 if not os.path.exists(os.getcwd()+'/output'):
     """
@@ -39,35 +51,7 @@ if not os.path.exists(os.getcwd()+'/output'):
     """
     os.makedirs(os.getcwd()+'/output')
 
-def get_duplicates(arr):
-    """
-    helper function to check for duplicate ids
-    """
-    dup_arr = arr[:]
-    for i in set(arr):
-        dup_arr.remove(i)
-    return list(set(dup_arr))
-
-def download(path, file):
-    if not os.path.exists(os.getcwd()+'/src'):
-        os.makedirs(os.getcwd()+'/src')
-
-    with open(os.getcwd()+'/src/'+file+'.zip', 'wb') as handle:
-        response = requests.get(path, stream=True)
-
-        if not response.ok:
-            # Something went wrong
-            print "Failed to download "+file
-            sys.exit()
-
-        for block in response.iter_content(1024):
-            if not block:
-                break
-
-            handle.write(block)
-    print 'Downloaded '+file
-    unzip(file)
-    print 'Unzipped '+file
+### SUPPORT FUNCTIONS
 
 def unzip(file):
     zfile = zipfile.ZipFile(os.getcwd()+'/src/'+file+'.zip')
@@ -76,46 +60,95 @@ def unzip(file):
         zfile.extract(name, os.getcwd()+'/src/')
     zfile.close()
 
-def get_steward_id(steward):
-    try:
-      id = [x['steward_id'] for x in STEWARDS if x["name"] == steward][0]
-      return id
-    except IndexError as e:
-        #Crap stewards
-        if steward=='Home Owner Association': return 9999 #private
-        if steward=='North Clackamas Parks and Recreation Department': return 58672 #should be district
-        if steward=='United States Fish & Wildlife' : return 43262
-        if steward=='Wood Village Parks & Recreation' : return 8348
-        if steward is None: return 9999 #private
-        return 9999
+def get_steward_id(steward_name):
+    result = None
+    if steward_name in STEWARD_MAP:
+        result = STEWARD_MAP[steward_name]
+    return result
 
-def compare_segment_arrays(a, b):
-  if len(a) != len(b): return False
-  for n in a:
-    if n in b:
-      continue
-    else:
-      return False
-  return True
+def is_motor_vehicles(atr):
+    result = False
+    for field in MOTOR_VEHICLE_FIELDS:
+        if field.upper() in atr:
+            result = (atr[field.upper()] == 'Yes') or result
+    yesno = 'yes' if result else 'no'
+    return yesno
 
-def is_subset(a,b):
-  foo=True
-  for val in a:
-    if val in b:
-      continue
-    else:
-      #print val
-      foo= False
-  return foo
+### PARSING FUNCTIONS
 
-def process_trail_segments():
-    trail_segments = []
-    named_trails = []
+def parse_stewards_csv():
+    print "* Parsing stewards.csv"
+    with open(os.getcwd() + "/input/stewards.csv", mode='r') as infile:
+        reader = csv.DictReader(infile, STEWARD_FIELDS) #stewards.csv header
+        reader.next()
+        for row in reader:
+            STEWARDS.append(row)
+        for row in STEWARDS:
+            row['id'] = str(row['id'])
+            print "** Steward"
+            print row
+            STEWARD_MAP[row['name']] = row['id']
+    print "* Done parsing stewards.csv"
 
+def parse_named_trails_csv():
+
+    print "* Parsing named_trails.csv"
+    with open(os.getcwd() + "/input/named_trails.csv", mode='r') as infile:
+        reader = csv.DictReader(infile, ['OBJECTID','Code', 'Name']) # named_trails.csv header
+        reader.next() #skip header line
+        for row in reader:
+            NAMED_TRAILS.append(row)
+        for row in NAMED_TRAILS:
+            row['id'] = str(row['Code'])
+            row['name'] = row['Name']
+            row['segment_ids'] = ""
+            row['description'] = ""
+            print "** Named Trail"
+            print row
+            NAMED_TRAIL_MAP[row['name']] = row['id']
+
+    print "* Done parsing named_trails.csv"
+
+
+def build_osm_tags(atr):
+    result = ""
+    tags = []
+    if atr['SURFACE'].strip():
+        tags.append('surface=' + atr['SURFACE'])
+    if atr['WIDTH'].strip():
+        tags.append('width=' + atr['WIDTH'])
+    return ";".join(tags)
+
+def transform_geometry(geom):
+    if geom['type'] == 'LineString':
+        return transform_linestring(geom['coordinates'])
+    elif geom['type'] == 'MultiLineString':
+        return transform_multilinestring(geom['coordinates'])
+    elif geom['type'] == 'Point':
+        return transform_coordinates(geom['coordinates'])
+
+
+def transform_linestring(linestring):
+    n_geom = []
+    for point in linestring:
+        n_geom.append(transform_coordinates(point))
+    return n_geom
+
+def transform_multilinestring(multilinestring):
+    n_geom = []
+    for linestring in multilinestring:
+        n_geom.append(transform_linestring(linestring))
+    return n_geom
+
+def transform_coordinates(coordinates):
+    return pyproj.transform(MIDNR, WGS84, coordinates[0], coordinates[1])
+
+def parse_trail_segments():
+    print "* Parsing trail segments"
     # read the trails shapefile
-    reader = shapefile.Reader(os.getcwd()+'/src/trails.shp')
+    reader = shapefile.Reader(os.getcwd()+'/input/trail_segments.shp')
     fields = reader.fields[1:]
-    field_names = [field[0] for field in fields]
+    field_names = [field[0].upper() for field in fields]
 
     #iterate trails
     for sr in reader.shapeRecords():
@@ -123,350 +156,167 @@ def process_trail_segments():
         atr = dict(zip(field_names, sr.record))
 
         # we're only allowing open existing trails to pass
-        if atr['STATUS'].upper() == 'OPEN' and atr['SYSTEMTYPE'].upper() != 'OTHER' and atr['TRLSURFACE'] != 'Water':
-            props = collections.OrderedDict()
 
-            #effectively join to the stewards table
-            id = props['id'] = str(int(atr['TRAILID']))
-            props['steward_id'] = get_steward_id(atr['AGENCYNAME'])
-            props['motor_vehicles'] = 'no'
-            props['foot'] = 'yes' if atr['HIKE'] == 'Yes' else 'No'
-            props['bicycle'] = 'yes' if atr['ROADBIKE'] == 'Yes'\
-                or atr['MTNBIKE'] == 'Yes' else 'no'
-            props['horse'] = 'yes' if atr['EQUESTRIAN'] == 'Yes' else 'no'
-            props['ski'] = 'no'
+        props = collections.OrderedDict()
 
-            # spec: "yes", "no", "permissive", "designated"
-            props['wheelchair'] = 'yes' if atr['ACCESSIBLE'] == 'Accessible' else 'no'
+        #effectively join to the stewards table
+        id = props['id'] = atr['TRAIL_ID']
+        props['steward_id'] = "000000"
+        props['motor_vehicles'] = is_motor_vehicles(atr)
+        props['foot'] = 'yes' if atr['HIKE'] == 'Yes' else 'no'
+        props['bicycle'] = 'yes' if atr['BIKE'] == 'Yes' else 'no'
+        props['horse'] = 'yes' if atr['EQUESTRIAN'] == 'Yes' else 'no'
+        props['ski'] = 'yes' if atr['SKI'] == 'Yes' else 'no'
 
-            props['osm_tags'] = 'surface='+atr['TRLSURFACE']+';width='+atr['WIDTH']
+        # spec: "yes", "no", "permissive", "designated"
+        props['wheelchair'] = 'yes' if atr['ADA'] == 'Yes' else 'no'
 
-            # Assumes single part geometry == our (RLIS) trails.shp
-            n_geom = []
-            geom = sr.shape.__geo_interface__
+        props['osm_tags'] = build_osm_tags(atr)
 
-            if geom['type'] !='LineString':
-                print 'Encountered multipart...skipping'
-                continue
+        # Assumes single part geometry == our (RLIS) trails.shp
 
-            for point in geom['coordinates']:
-                n_geom.append(pyproj.transform(ORSP, WGS84, point[0], point[1]))
+        geom = sr.shape.__geo_interface__
+        geom_type = geom['type']
+        n_geom = transform_geometry(geom)
 
-            segment= collections.OrderedDict()
-            segment['type']='Feature'
-            segment['properties'] = props
-            segment['geometry'] = {"type":"LineString", "coordinates":n_geom}
+        segment= collections.OrderedDict()
+        segment['type']='Feature'
+        segment['properties'] = props
+        segment['geometry'] = {"type":geom_type, "coordinates":n_geom}
 
-            trail_segments.append(segment)
+        # NEED TO PARSE THE TRAIL_CODE FIELD TO NAMED_TRAIL_SEGMENT_ID_MAP
 
-            if atr['TRAILNAME'] != None and '   ' not in atr['TRAILNAME']:
-              if len([x for x in named_trails if x["atomic_name"]==atr['TRAILNAME']+'|'+atr['COUNTY']])==0:
-                named_trails.append({'atomic_name': atr['TRAILNAME']+'|'+atr['COUNTY'], 'name':atr['TRAILNAME'],'segment_ids':[atr['TRAILID']]})
-              else:
-                [x for x in named_trails if x["atomic_name"]==atr['TRAILNAME']+'|'+atr['COUNTY']][0]['segment_ids'].append(atr['TRAILID'])
+        _codes = atr['TRAIL_CODE'].split(";")
+        for code in _codes:
+            if code in NAMED_TRAIL_SEGMENT_ID_MAP:
+                NAMED_TRAIL_SEGMENT_ID_MAP[code].append(id)
+            else:
+                NAMED_TRAIL_SEGMENT_ID_MAP[code] = [id]
 
-            if atr['SYSTEMNAME'] != None and '   ' not in atr['SYSTEMNAME']:
-              if len([x for x in named_trails if x['atomic_name']==atr['SYSTEMNAME']])==0:
-                named_trails.append({'atomic_name': atr['SYSTEMNAME'], 'name':atr['SYSTEMNAME'],'segment_ids':[atr['TRAILID']]})
-              else:
-                [x for x in named_trails if x["atomic_name"]==atr['SYSTEMNAME']][0]['segment_ids'].append(atr['TRAILID'])
+        TRAIL_SEGMENTS.append(segment)
 
-            if atr['SHAREDNAME'] != None and '   ' not in atr['SHAREDNAME']:
-              if len([x for x in named_trails if x['atomic_name']==atr['SHAREDNAME']])==0:
-                named_trails.append({'atomic_name': atr['SHAREDNAME'], 'name':atr['SHAREDNAME'],'segment_ids':[atr['TRAILID']]})
-              else:
-                [x for x in named_trails if x["atomic_name"]==atr['SHAREDNAME']][0]['segment_ids'].append(atr['TRAILID'])
 
     #Release the trails shapefile
 
     reader = None
 
-    #step 1
-    #remove duplicate geometries in named_trails
-    all_arrays = []
-    for trail in named_trails: all_arrays.append(trail['segment_ids'])
+    print ("* Done parsing trail segments")
 
-    #identify duplicate geometries
-    duplicates = [x for x in named_trails if len([y for y in all_arrays if compare_segment_arrays(x['segment_ids'],y)])>1]
-
-    glob_segs = None
-
-    counter = 0
-    for dup in duplicates:
-      if glob_segs is None or not compare_segment_arrays(dup['segment_ids'],glob_segs):
-
-        #find ur buddy
-        d = [x for x in duplicates if compare_segment_arrays(x['segment_ids'],dup['segment_ids'])]
-        glob_segs = dup['segment_ids']
-
-        to_remove = [x for x in d if '|' in x['atomic_name']]
-
-        if len(to_remove) == 1:
-          named_trails.remove(to_remove[0])
-        else:
-          print 'no piped atomic name... I dunno'
-
-    #step 2 - remove atomically stored trails (with county) that are pure
-    # subsets of a regional trail superset
-    glob_name = None
-    for trail in named_trails:
-      if glob_name is None or trail['name'] != glob_name:
-        dups = [x for x in named_trails if x['name']==trail['name']]
-        glob_name = trail['name']
-
-        #determine the dup with the most segs *heinous*
-        superset = max(enumerate(dups), key = lambda tup: len(tup[1]['segment_ids']))
-        superitem = [x for x in dups if x==superset[1]][0]
-
-        for dup in dups:
-          if len(dup['segment_ids']) != len(superitem['segment_ids']):
-            foo =is_subset(dup['segment_ids'], superitem['segment_ids'])
-            if foo and '|' in dup['atomic_name']:
-              #print 'Removed '+dup['atomic_name'] + ' from named_trails'
-              named_trails.remove(dup)
-        glob_name = trail['name']
-
-    #step 3 - remove atomically stored trails (with county) that are
-    # *impure* subsets of a regional trail superset
-    #this sucks
-    #So let's look for where the name matches the atomic name of an existing
-    #named trail - the assumption being that the atomic name of a regional
-    #trail will not include the pipe '|' and county
-    to_delete=[]
-
-    for trail in named_trails:
-      if '|' in trail['atomic_name']:
-        for test_trail in named_trails:
-          if trail['name'] == test_trail['atomic_name']:
-            #print trail['name'] + ' combined with regional trail'
-            #Insert whatever segments in trail that aren't in
-            #test_trail
-
-            for segment in trail['segment_ids']:
-              if segment not in test_trail['segment_ids']:
-                test_trail['segment_ids'].append(segment)
-
-            #append to to_delete
-            to_delete.append(trail)
-
-    #delete
-    for trail in to_delete:
-      named_trails.remove(trail)
-
-    #step 4 - assign named trail id from reference table
-    for trail in named_trails:
-      if '|' in trail['atomic_name']:
-        county = trail['atomic_name'].split('|')[1].strip()
-        name =  trail['atomic_name'].split('|')[0].strip()
-
-      else: #don't need the county == blank
-        name = trail['atomic_name']
-        county = ''
-
-      id= [x for x in NAMED_TRAIL_IDS if x[1]==county and x[2]==name]
-
-      if len(id)==0:
-        print '*' +name+' || '+ county # no id in named_trails
-      else:
-        [x for x in named_trails if x['atomic_name']==trail['atomic_name']][0]['named_trail_id'] = id[0]
-
-    #step 5 - remove atomic name
-    for n in named_trails:
-      n.pop('atomic_name')
-
-    print ("Completed trails")
-
-    return trail_segments, named_trails
-
-def process_areas():
-    # read the parks shapefile
-    reader = shapefile.Reader(os.getcwd()+'/src/orca_sites.shp') #this is actually ORCA_sites_beta
+def parse_trailheads():
+    print ("* Parsing trailheads")
+    # read the trails shapefile
+    reader = shapefile.Reader(os.getcwd()+'/input/trailheads.shp')
     fields = reader.fields[1:]
-    field_names = [field[0] for field in fields]
+    field_names = [field[0].upper() for field in fields]
 
-    areas = []
-    counter = 0
+    #iterate trails
     for sr in reader.shapeRecords():
-        # if counter == 1000: break #Take the 1st 10,000 features, ORCA is a supermassive YKW
+
         atr = dict(zip(field_names, sr.record))
 
-        # if atr['STATUS'] == 'Closed': #We don't want any closed sites to show up.
-        #     continue
+        # we're only allowing open existing trails to pass
 
-        """
-        SELECT *
-        FROM   orca
-        WHERE  county IN ( 'Clackamas', 'Multnomah', 'Washington' )
-               AND ( ( ownlev1 IN ( 'Private', 'Non-Profits' )
-                       AND ( unittype IN ( 'Natural Area', 'Other' )
-                             AND recreation = 'Yes' )
-                        OR conservation = 'High' )
-                      OR ( ownlev1 NOT IN ( 'Private', 'Non-Profits' )
-                           AND ( unittype = 'Other'
-                                 AND ( recreation = 'Yes'
-                                        OR conservation IN ( 'High', 'Medium' ) )
-                                  OR unittype = 'Natural Area' ) )
-                      OR ( ownlev2 = 'Non-profit Conservation' )
-                      OR ( unittype = 'Park' ) )
-        """
+        props = collections.OrderedDict()
 
-        # if atr['COUNTY'] in ['Clackamas', 'Multnomah', 'Washington'] and ((atr['OWNLEV1'] in ['Private', 'Non-Profits'] and (atr['UNITTYPE'] in ['Natural Area', 'Other'] and atr['RECREATION']=='Yes') or atr['CONSERVATI']=='High') or (atr['OWNLEV1'] not in ['Private', 'Non-Profits'] and (atr['UNITTYPE']== 'Other' and (atr['RECREATION']=='Yes' or atr['CONSERVATI'] in ['High', 'Medium']) or atr['UNITTYPE'] == 'Natural Area') ) or atr['OWNLEV2'] == 'Non-profit Conservation' or atr['UNITTYPE']== 'Park'):
-        if 1:
-            props = collections.OrderedDict()
+        #effectively join to the stewards table
+        id = props['id'] = str(atr['ID'])
+        props['steward_id'] = str(atr['STEWARD_ID'])
+        props['segment_ids'] = atr['TRAIL_SEG_']
+        props['name'] = atr['THNAME']
+        props['restrooms'] = 'yes' if atr['RESTROOM'] == 'Yes' else 'no'
+        props['drinkwater'] = 'yes' if atr['WATER'] == 'Yes' else 'no'
+        props['parking'] = 'yes' if atr['PARKING'] == 'Yes' else 'no'
+        props['address'] = atr['ADDRESS']
 
-            # if atr['MANAGER'] not in stewards.iterkeys():
-            #     m = hashlib.sha224(atr['MANAGER']).hexdigest()
-            #     agency_id = str(int(m[-6:], 16))
-            #     stewards[atr['MANAGER']] = agency_id
+        # Assumes single part geometry == our (RLIS) trails.shp
 
-            geom = sr.shape.__geo_interface__
+        geom = sr.shape.__geo_interface__
 
-            if geom['type'] == 'MultiPolygon':
-                polys=[]
-                for poly in geom['coordinates']:
-                    rings = []
-                    for ring in poly:
-                        n_geom = []
-                        for point in ring:
-                            n_geom.append(pyproj.transform(ORSP, WGS84, point[0], point[1]))
-                        rings.append(n_geom)
-                    polys.append(rings)
+        n_geom = transform_coordinates(geom['coordinates'])
 
-                new_geom = {"type":"MultiPolygon", "coordinates":polys}
-            else:
-                rings = []
-                for ring in geom['coordinates']:
-                    n_geom = []
-                    for point in ring:
-                        n_geom.append(pyproj.transform(ORSP, WGS84, point[0], point[1]))
-                    rings.append(n_geom)
-                new_geom = {"type":"Polygon", "coordinates":rings}
+        segment= collections.OrderedDict()
+        segment['type']='Feature'
+        segment['properties'] = props
+        segment['geometry'] = {"type":"Point", "coordinates":n_geom}
 
-            props['name'] = atr['SITENAME']
+        TRAILHEADS.append(segment)
 
-            props['id'] = int(atr['DISSOLVEID'])
-            if props['id'] in ORCA_SITES:
-                props['steward_id'] = ORCA_SITES[props['id']]
-            else:
-                props['steward_id'] = 5127
-            props['url'] = ''
-            props['osm_tags'] = ''
 
-            _area= collections.OrderedDict()
-            _area['type']='Feature'
-            _area['properties'] = props
-            _area['geometry'] = new_geom
+    #Release the trails shapefile
 
-            areas.append(_area)
-
-            counter +=1
-    # free up the shp file.
     reader = None
 
-    return areas
+    print ("* Done parsing trailheads")
+
+### WRITING FUNCTIONS
+
+def write_stewards_csv():
+    OUT_STEWARD_FIELDS = ['id', 'name', 'url', 'phone', 'address','publisher', 'license']
+    print "* Writing stewards.csv"
+    stewards_out = open(os.getcwd() + "/output/stewards.csv", "w")
+    stewards_out.write(",".join(OUT_STEWARD_FIELDS)+"\n")
+
+    for steward in STEWARDS:
+        _row_data = [ \
+            str(steward['id']), \
+            steward['name'], \
+            steward['url'], \
+            steward['phone'], \
+            steward['address'], \
+            steward['publisher'], \
+            steward['license'] \
+            ]
+        stewards_out.write(','.join(_row_data)+"\n")
+    stewards_out.close()
+
+    print "* Done writing stewards.csv"
+
+def write_named_trails_csv():
+    print "* Writing named_trails.csv"
+    named_trails_out = open(os.getcwd() + "/output/named_trails.csv", "w")
+    named_trails_out.write('"id","name","segment_ids","description","part_of"\n')
+
+    for named_trail in NAMED_TRAILS:
+        _segment_ids = ';'.join(NAMED_TRAIL_SEGMENT_ID_MAP[named_trail['id']]) if (named_trail['id'] in NAMED_TRAIL_SEGMENT_ID_MAP) else ''
+        _row_data = [ \
+            str(named_trail['id']), \
+            named_trail['name'], \
+            _segment_ids, \
+            '','']
+        named_trails_out.write(','.join(_row_data)+"\n")
+    named_trails_out.close()
+    print "* Done writing named_trails.csv"
+
+def write_trail_segments_geojson():
+    trail_segments_out = open(os.getcwd() + "/output/trail_segments.geojson", "w")
+    trail_segments_out.write(json.dumps({"type": "FeatureCollection",\
+    "features": TRAIL_SEGMENTS}, indent=2) + "\n")
+    trail_segments_out.close()
+
+def write_trailheads_geojson():
+    trailheads_out = open(os.getcwd() + "/output/trailheads.geojson", "w")
+    trailheads_out.write(json.dumps({"type": "FeatureCollection",\
+    "features": TRAILHEADS}, indent=2) + "\n")
+    trailheads_out.close()
 
 if __name__ == "__main__":
 
-    #####################################################
-    # Download data from RLIS
-    #
-    # download(TRAILS_URL, 'trails')
-    #download(ORCA_URL, 'orca')
-    #
-    #####################################################
+    # PARSE PARSE PARSE
+    parse_stewards_csv()
 
-    #####################################################
-    # Load Stewards into Python object
-    #
-    with open(os.getcwd() + "/output/stewards.csv", mode='r') as infile:
-      reader = csv.DictReader(infile, ['steward_id', 'name', 'url', 'phone', 'address','publisher', 'license']) #stewards.csv header
-      reader.next()
-      for row in reader:
-        STEWARDS.append(row)
-      for row in STEWARDS:
-        row['steward_id'] = int(row['steward_id'])
-    print "sucked up stewards"
-    #
-    #
-    #####################################################
+    parse_named_trails_csv()
 
-    #####################################################
-    # Load Named Trails into Python object
-    #
-    with open(os.getcwd() + "/ref/named_trails_lookup.csv", mode='r') as infile:
-      reader = csv.reader(infile)
-      reader.next() #skip header line
-      NAMED_TRAIL_IDS = list(reader)
-      for row in NAMED_TRAIL_IDS:
-        row[0] = int(row[0])
-    print "Sucked up Named trail ids"
+    parse_trail_segments()
 
-    #####################################################
-    # Load Named Trails into Python object
-    #
-    with open(os.getcwd() + "/ref/orca_sites_to_steward.csv", mode='r') as infile:
-      reader = csv.reader(infile)
-      reader.next() #skip header line
+    parse_trailheads()
 
-      for row in reader:
-        # print row
-        ORCA_SITES[int(row[0])] = int(row[1])
-    print "Sucked up orca sites"
+    # WRITE WRITE WRITE
+    write_stewards_csv()
 
-    #
-    #
-    #####################################################
+    write_named_trails_csv()
 
-    #####################################################
-    # Load objects and arrays with calls to core functions
-    #
-    trail_segments, named_trails = process_trail_segments()
+    write_trail_segments_geojson()
 
-    ######################################################
-    # write named_trails.csv
-    #
-    named_trails_out = open(os.getcwd() + "/output/named_trails.csv", "w")
-    named_trails_out.write('"name","segment_ids","id","description","part_of"\n')
+    write_trailheads_geojson()
 
-    for named_trail in named_trails:
-      try: #horrible hack for trails that are in the current (2014 Q4) Trails download in RLIS
-        #discovery that are not in named_trails.csv because they were removed or whatever...
-        named_trails_out.write(named_trail['name']+","+ ";".join(str(int(x)) for x in named_trail['segment_ids'])+","+ str(named_trail['named_trail_id'][0]) + ",,\n")
-      except:
-        pass
-
-    named_trails_out.close()
-
-    print 'Created named_trails.csv'
-    #
-    ########################################################
-
-    ########################################################
-    # write trail_segments.geojson
-    #
-    trail_segments_out = open(os.getcwd() + "/output/trail_segments.geojson", "w")
-    trail_segments_out.write(json.dumps({"type": "FeatureCollection",\
-    "features": trail_segments}, indent=2) + "\n")
-    trail_segments_out.close()
-
-    print 'Created trail_segments.geojson'
-    #
-    ########################################################
-
-    # sys.exit(1)
-
-    areas= process_areas()
-
-    ########################################################
-    # write areas.geojson
-    #
-    areas_out = open(os.getcwd()+"/output/areas.geojson", "w")
-    areas_out.write(json.dumps({"type": "FeatureCollection",\
-    "features": areas}, indent=2, encoding="Latin1") + "\n")
-    areas_out.close()
-
-    print 'Created areas.geojson'
-    #
-    ########################################################
-
-    print 'Process complete'
+    print '* Process complete'
