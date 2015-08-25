@@ -15,9 +15,6 @@
 # http://www.lfd.uci.edu/~gohlke/pythonlibs/#pyshp
 import shapefile
 
-# http://www.lfd.uci.edu/~gohlke/pythonlibs/#pyproj
-import pyproj
-
 # http://www.lfd.uci.edu/~gohlke/pythonlibs/#requests
 import requests
 
@@ -27,22 +24,23 @@ import json
 
 import csv
 
+from support import *
+
 # http://www.codeforamerica.org/specifications/trails/spec.html
 
 TRAILS_URL = 'http://library.oregonmetro.gov/rlisdiscovery/trails.zip'
 
-WGS84 = pyproj.Proj("+init=EPSG:4326") # LatLon with WGS84 datum used for geojson
-MIDNR = pyproj.Proj("+init=EPSG:3078", preserve_units=True) # datum used by Michigan
-
 #OBJECTID,name,id,url,address,publisher,license,phone
 STEWARD_FIELDS = ['OBJECTID', 'name', 'id', 'url', 'address', 'publisher', 'license', 'phone' ]
-MOTOR_VEHICLE_FIELDS = ['AllTerVeh','FourWD','ATV','Motorbike','MCCCT','Snowmobile']
 STEWARDS = []
 STEWARD_MAP = {}
 NAMED_TRAILS = []
+NAMED_TRAIL_IDS = []
 NAMED_TRAIL_MAP = {}
 NAMED_TRAIL_SEGMENT_ID_MAP = {}
+SEGMENT_ID_NAMED_TRAIL_MAP = {}
 TRAIL_SEGMENTS = []
+TRAIL_SEGMENT_IDS = []
 TRAILHEADS = []
 
 if not os.path.exists(os.getcwd()+'/output'):
@@ -51,31 +49,8 @@ if not os.path.exists(os.getcwd()+'/output'):
     """
     os.makedirs(os.getcwd()+'/output')
 
-### SUPPORT FUNCTIONS
-
-def unzip(file):
-    zfile = zipfile.ZipFile(os.getcwd()+'/src/'+file+'.zip')
-    for name in zfile.namelist():
-        (dirname, filename) = os.path.split(name)
-        zfile.extract(name, os.getcwd()+'/src/')
-    zfile.close()
-
-def get_steward_id(steward_name):
-    result = None
-    if steward_name in STEWARD_MAP:
-        result = STEWARD_MAP[steward_name]
-    return result
-
-def is_motor_vehicles(atr):
-    result = False
-    for field in MOTOR_VEHICLE_FIELDS:
-        if field.upper() in atr:
-            result = (atr[field.upper()] == 'Yes') or result
-    yesno = 'yes' if result else 'no'
-    return yesno
 
 ### PARSING FUNCTIONS
-
 def parse_stewards_csv():
     print "* Parsing stewards.csv"
     with open(os.getcwd() + "/input/stewards.csv", mode='r') as infile:
@@ -106,42 +81,10 @@ def parse_named_trails_csv():
             print "** Named Trail"
             print row
             NAMED_TRAIL_MAP[row['name']] = row['id']
+            NAMED_TRAIL_IDS.append(row['id'])
 
     print "* Done parsing named_trails.csv"
 
-
-def build_osm_tags(atr):
-    result = ""
-    tags = []
-    if atr['SURFACE'].strip():
-        tags.append('surface=' + atr['SURFACE'])
-    if atr['WIDTH'].strip():
-        tags.append('width=' + atr['WIDTH'])
-    return ";".join(tags)
-
-def transform_geometry(geom):
-    if geom['type'] == 'LineString':
-        return transform_linestring(geom['coordinates'])
-    elif geom['type'] == 'MultiLineString':
-        return transform_multilinestring(geom['coordinates'])
-    elif geom['type'] == 'Point':
-        return transform_coordinates(geom['coordinates'])
-
-
-def transform_linestring(linestring):
-    n_geom = []
-    for point in linestring:
-        n_geom.append(transform_coordinates(point))
-    return n_geom
-
-def transform_multilinestring(multilinestring):
-    n_geom = []
-    for linestring in multilinestring:
-        n_geom.append(transform_linestring(linestring))
-    return n_geom
-
-def transform_coordinates(coordinates):
-    return pyproj.transform(MIDNR, WGS84, coordinates[0], coordinates[1])
 
 def parse_trail_segments():
     print "* Parsing trail segments"
@@ -173,8 +116,6 @@ def parse_trail_segments():
 
         props['osm_tags'] = build_osm_tags(atr)
 
-        # Assumes single part geometry == our (RLIS) trails.shp
-
         geom = sr.shape.__geo_interface__
         geom_type = geom['type']
         n_geom = transform_geometry(geom)
@@ -194,7 +135,7 @@ def parse_trail_segments():
                 NAMED_TRAIL_SEGMENT_ID_MAP[code] = [id]
 
         TRAIL_SEGMENTS.append(segment)
-
+        TRAIL_SEGMENT_IDS.append(id)
 
     #Release the trails shapefile
 
@@ -227,8 +168,6 @@ def parse_trailheads():
         props['drinkwater'] = 'yes' if atr['WATER'] == 'Yes' else 'no'
         props['parking'] = 'yes' if atr['PARKING'] == 'Yes' else 'no'
         props['address'] = atr['ADDRESS']
-
-        # Assumes single part geometry == our (RLIS) trails.shp
 
         geom = sr.shape.__geo_interface__
 
@@ -299,6 +238,17 @@ def write_trailheads_geojson():
     "features": TRAILHEADS}, indent=2) + "\n")
     trailheads_out.close()
 
+def validate():
+
+    o_count = 0
+    for trail in NAMED_TRAILS:
+        if trail['id'] not in NAMED_TRAIL_SEGMENT_ID_MAP:
+            print trail['id'] + " has no segments"
+            o_count = o_count + 1
+    print str(len(NAMED_TRAILS)) + " trails"
+    print str(o_count) + " empty trails"
+
+
 if __name__ == "__main__":
 
     # PARSE PARSE PARSE
@@ -318,5 +268,7 @@ if __name__ == "__main__":
     write_trail_segments_geojson()
 
     write_trailheads_geojson()
+
+    validate()
 
     print '* Process complete'
