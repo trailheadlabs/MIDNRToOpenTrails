@@ -128,14 +128,17 @@ def parse_trail_segments():
         # NEED TO PARSE THE TRAIL_CODE FIELD TO NAMED_TRAIL_SEGMENT_ID_MAP
 
         _codes = atr['TRAIL_CODE'].split(";")
-        for code in _codes:
-            if code in NAMED_TRAIL_SEGMENT_ID_MAP:
-                NAMED_TRAIL_SEGMENT_ID_MAP[code].append(id)
-            else:
-                NAMED_TRAIL_SEGMENT_ID_MAP[code] = [id]
+        if len(_codes) > 0:
+            SEGMENT_ID_NAMED_TRAIL_MAP[id] = _codes
+            for code in _codes:
+                if code in NAMED_TRAIL_SEGMENT_ID_MAP:
+                    NAMED_TRAIL_SEGMENT_ID_MAP[code].append(id)
+                else:
+                    NAMED_TRAIL_SEGMENT_ID_MAP[code] = [id]
 
         TRAIL_SEGMENTS.append(segment)
         TRAIL_SEGMENT_IDS.append(id)
+
 
     #Release the trails shapefile
 
@@ -240,14 +243,34 @@ def write_trailheads_geojson():
 
 def validate():
 
-    o_count = 0
+    # Check for empty trails
+    empty_count = 0
+    missing_count = 0
     for trail in NAMED_TRAILS:
         if trail['id'] not in NAMED_TRAIL_SEGMENT_ID_MAP:
             print trail['id'] + " has no segments"
-            o_count = o_count + 1
+            empty_count = empty_count + 1
+        else:
+            segments = NAMED_TRAIL_SEGMENT_ID_MAP[trail['id']]
+            for id in segments:
+                if id not in TRAIL_SEGMENT_IDS:
+                    missing_count = missing_count + 1
+                    print 'Missing trail segment : ' + str(id)
+                else:
+                    print "Found trail segment " + str(id)
     print str(len(NAMED_TRAILS)) + " trails"
-    print str(o_count) + " empty trails"
+    print str(empty_count) + " empty trails"
+    print str(missing_count) + " missing segments"
 
+    # Check for trail segments without trails
+    for segment in TRAIL_SEGMENTS:
+        unused_count = 0
+        if segment['properties']['id'] not in SEGMENT_ID_NAMED_TRAIL_MAP:
+            unused_count = unused_count + 1
+            print "Unused trail segment : " + segment['properties']['id']
+
+    print str(len(TRAIL_SEGMENTS)) + " trail segments"
+    print str(unused_count) + " unused trail segments"
 
 if __name__ == "__main__":
 
