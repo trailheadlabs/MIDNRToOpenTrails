@@ -3,41 +3,35 @@ Michigan DNR to Open Trails Converter
 
 A working python conversion script for Michigan DNR data to the [Open Trail specification](http://www.codeforamerica.org/specifications/trails/spec.html)
 
-* Aims to be lean on dependencies.
-  * Does not require GDAL, shapely, arcpy etc.
-* Not web-based.
+Getting Started
+===============
 
-In Brief
+1. Clone the repo `git clone git@github.com:trailheadlabs/MIDNRToOpenTrails.git`
+2. Ensure you have Python 2.7+ installed by running `python --version`
+3. [Install Python 2.7+](https://www.python.org/downloads/) if not already installed.
+4. Install dependencies by running `pip install -r requirements.txt`
+5. Copy latest marquette_pilot_open_data.zip to input directory
+6. Run `python MIDNRToOpenTrails.py`
+7. A new MI_DNR_OpenTrails.zip will be placed in the output directory. Enjoy!
+
+What this script does.
 ========
 Order of operations
 
-1. Download lookup tables and shapefiles
-2. Unzip
-3. Read shapefile (into memory)
-4. Create trails_segments.geojson
-5. Create named_trails.csv
-6. Create stewards.csv
-7. Create areas.geojson
+1. Unzips input files (stewards.xls, named_trails.xls, trailheads and trail_segments shapefiles)
+2. Reads input files (into memory)
+3. Builds OpenTrails compliant data structures in memory
+4. Writes data structures to OpenTrails files (stewards.csv, named_trails.csv, trailheads.geojson, trail_segments.geojson)
+5. Zips files into MT_DNR_OpenTrails.zip
 
-Dependencies
+Dependencies 
 ============
-
-* Check if you have Python 2.7+ by running `python --version` from a terminal
-* [Install Python 2.7+](https://www.python.org/downloads/) if not already installed.
-* Run `pip install -r requirements.txt` to install dependent libraries, or you can download and install the individually:
 
  * [pyshp](http://www.lfd.uci.edu/~gohlke/pythonlibs/#pyshp)
  * [pyproj](http://www.lfd.uci.edu/~gohlke/pythonlibs/#pyproj)
  * [requests](http://www.lfd.uci.edu/~gohlke/pythonlibs/#requests)
 
-Instructions
-===========
-
-* Clone or download the zipped repository
-* Satisfy dependencies (see above)
-* `>python MIDNRToOpenTrails.py`
-
-Disclaimers
+Notes
 ==========
 
 * Does not include areas.geojson
