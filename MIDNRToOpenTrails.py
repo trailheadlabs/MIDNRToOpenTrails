@@ -22,6 +22,8 @@ import hashlib, collections, csv, os, sys, zipfile
 
 import json
 
+import xlrd
+
 import csv
 
 from support import *
@@ -51,7 +53,21 @@ if not os.path.exists(os.getcwd()+'/output'):
 
 
 ### PARSING FUNCTIONS
+def xls_to_csv(ExcelFile, SheetIndex, CSVFile):
+    workbook = xlrd.open_workbook(ExcelFile)
+    worksheet = workbook.sheet_by_index(SheetIndex)
+    csvfile = open(CSVFile, 'wb')
+    wr = csv.writer(csvfile, quoting=csv.QUOTE_ALL)
+
+    for rownum in xrange(worksheet.nrows):
+        wr.writerow(
+            list(x.encode('utf-8') if type(x) == type(u'') else x
+                for x in worksheet.row_values(rownum)))
+
+    csvfile.close()
+
 def parse_stewards_csv():
+    xls_to_csv("./input/stewards.xls",0,"./input/stewards.csv")
     print "* Parsing stewards.csv"
     with open(os.getcwd() + "/input/stewards.csv", mode='r') as infile:
         reader = csv.DictReader(infile, STEWARD_FIELDS) #stewards.csv header
@@ -66,7 +82,7 @@ def parse_stewards_csv():
     print "* Done parsing stewards.csv"
 
 def parse_named_trails_csv():
-
+    xls_to_csv("./input/named_trails.xls",0,"./input/named_trails.csv")
     print "* Parsing named_trails.csv"
     with open(os.getcwd() + "/input/named_trails.csv", mode='r') as infile:
         reader = csv.DictReader(infile, ['OBJECTID','Code', 'Name']) # named_trails.csv header
@@ -104,7 +120,7 @@ def parse_trail_segments():
 
         #effectively join to the stewards table
         id = props['id'] = atr['TRAIL_ID']
-        props['steward_id'] = "000000"
+        props['steward_id'] = atr['STEWARD_ID']
         props['motor_vehicles'] = is_motor_vehicles(atr)
         props['foot'] = 'yes' if atr['HIKE'] == 'Yes' else 'no'
         props['bicycle'] = 'yes' if atr['BIKE'] == 'Yes' else 'no'
@@ -114,7 +130,7 @@ def parse_trail_segments():
         # spec: "yes", "no", "permissive", "designated"
         props['wheelchair'] = 'yes' if atr['ADA'] == 'Yes' else 'no'
 
-        props['osm_tags'] = build_osm_tags(atr)
+        props['osm_tags'] = atr['OSM_TAGS']
 
         geom = sr.shape.__geo_interface__
         geom_type = geom['type']
