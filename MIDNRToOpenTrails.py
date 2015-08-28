@@ -30,9 +30,6 @@ from support import *
 
 # http://www.codeforamerica.org/specifications/trails/spec.html
 
-TRAILS_URL = 'http://library.oregonmetro.gov/rlisdiscovery/trails.zip'
-
-#OBJECTID,name,id,url,address,publisher,license,phone
 STEWARD_FIELDS = ['OBJECTID', 'name', 'id', 'url', 'address', 'publisher', 'license', 'phone' ]
 STEWARDS = []
 STEWARD_MAP = {}
@@ -186,6 +183,7 @@ def parse_trailheads():
         props['restrooms'] = 'yes' if atr['RESTROOM'] == 'Yes' else 'no'
         props['drinkwater'] = 'yes' if atr['WATER'] == 'Yes' else 'no'
         props['parking'] = 'yes' if atr['PARKING'] == 'Yes' else 'no'
+        props['kiosk'] = 'yes' if atr['INFO'] == 'Yes' else 'no'
         props['address'] = atr['ADDRESS']
 
         geom = sr.shape.__geo_interface__
@@ -235,13 +233,15 @@ def write_named_trails_csv():
     named_trails_out.write('"id","name","segment_ids","description","part_of"\n')
 
     for named_trail in NAMED_TRAILS:
-        _segment_ids = ';'.join(NAMED_TRAIL_SEGMENT_ID_MAP[named_trail['id']]) if (named_trail['id'] in NAMED_TRAIL_SEGMENT_ID_MAP) else ''
-        _row_data = [ \
-            str(named_trail['id']), \
-            named_trail['name'], \
-            _segment_ids, \
-            '','']
-        named_trails_out.write(','.join(_row_data)+"\n")
+        # LEAVE EMPTY TRAILS OUT OF THE named_trails.csv file
+        if named_trail['id'] in NAMED_TRAIL_SEGMENT_ID_MAP:
+            _segment_ids = ';'.join(NAMED_TRAIL_SEGMENT_ID_MAP[named_trail['id']]) if (named_trail['id'] in NAMED_TRAIL_SEGMENT_ID_MAP) else ''
+            _row_data = [ \
+                str(named_trail['id']), \
+                named_trail['name'], \
+                _segment_ids, \
+                '','']
+            named_trails_out.write(','.join(_row_data)+"\n")
     named_trails_out.close()
     print "* Done writing named_trails.csv"
 
@@ -290,6 +290,9 @@ def validate():
 
 if __name__ == "__main__":
 
+    # unzip the input zip file
+    unzip_input("marquette_pilot_open_data")
+
     # PARSE PARSE PARSE
     parse_stewards_csv()
 
@@ -308,6 +311,9 @@ if __name__ == "__main__":
 
     write_trailheads_geojson()
 
+    # Report on the quality of the data
     validate()
 
+    # zip the individual OpenTrails files up
+    zip_output()
     print '* Process complete'

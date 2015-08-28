@@ -1,5 +1,7 @@
 import hashlib, collections, csv, os, sys, zipfile
 
+from zipfile import ZipFile
+
 # http://www.lfd.uci.edu/~gohlke/pythonlibs/#pyproj
 import pyproj
 
@@ -10,12 +12,20 @@ MOTOR_VEHICLE_FIELDS = ['AllTerVeh','FourWD','ATV','Motorbike','MCCCT','Snowmobi
 
 ### SUPPORT FUNCTIONS
 
-def unzip(file):
-    zfile = zipfile.ZipFile(os.getcwd()+'/src/'+file+'.zip')
+def unzip_input(file):
+    print "* Unzipping" + file
+    zfile = zipfile.ZipFile(os.getcwd()+'/input/'+file+'.zip')
     for name in zfile.namelist():
         (dirname, filename) = os.path.split(name)
-        zfile.extract(name, os.getcwd()+'/src/')
+        zfile.extract(name, os.getcwd()+'/input/')
     zfile.close()
+
+def zip_output():
+    with ZipFile('./output/MI_DNR_OpenTrails.zip', 'w', zipfile.ZIP_DEFLATED) as myzip:
+        myzip.write('./output/named_trails.csv')
+        myzip.write('./output/stewards.csv')
+        myzip.write('./output/trailheads.geojson')
+        myzip.write('./output/trail_segments.geojson')
 
 def get_steward_id(steward_name):
     result = None

@@ -11,6 +11,7 @@
         "restrooms": "no", 
         "drinkwater": "no", 
         "parking": "yes", 
+        "kiosk": "yes", 
         "address": "46.2295823210454, -87.4849741351175"
       }, 
       "geometry": {
@@ -31,6 +32,7 @@
         "restrooms": "yes", 
         "drinkwater": "no", 
         "parking": "yes", 
+        "kiosk": "yes", 
         "address": "46.4607779627694, -87.4243516672884"
       }, 
       "geometry": {
@@ -51,6 +53,7 @@
         "restrooms": "no", 
         "drinkwater": "no", 
         "parking": "yes", 
+        "kiosk": "yes", 
         "address": "46.4408610046128, -87.412206446458"
       }, 
       "geometry": {
@@ -71,6 +74,7 @@
         "restrooms": "yes", 
         "drinkwater": "no", 
         "parking": "yes", 
+        "kiosk": "yes", 
         "address": "46.4493020964394, -87.423169959919"
       }, 
       "geometry": {
@@ -91,6 +95,7 @@
         "restrooms": "yes", 
         "drinkwater": "no", 
         "parking": "yes", 
+        "kiosk": "yes", 
         "address": "46.6340131863366, -87.4678551872752"
       }, 
       "geometry": {
@@ -111,6 +116,7 @@
         "restrooms": "no", 
         "drinkwater": "no", 
         "parking": "yes", 
+        "kiosk": "yes", 
         "address": "46.6331079218127, -87.4740731276262"
       }, 
       "geometry": {
@@ -131,6 +137,7 @@
         "restrooms": "no", 
         "drinkwater": "no", 
         "parking": "yes", 
+        "kiosk": "yes", 
         "address": "46.6030146430846, -87.4598223805763"
       }, 
       "geometry": {
@@ -151,6 +158,7 @@
         "restrooms": "yes", 
         "drinkwater": "no", 
         "parking": "yes", 
+        "kiosk": "yes", 
         "address": "46.6146934219217, -87.4676121330623"
       }, 
       "geometry": {
