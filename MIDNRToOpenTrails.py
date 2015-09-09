@@ -210,7 +210,8 @@ def write_stewards_csv():
     OUT_STEWARD_FIELDS = ['id', 'name', 'url', 'phone', 'address','publisher', 'license']
     print "* Writing stewards.csv"
     stewards_out = open(os.getcwd() + "/output/stewards.csv", "w")
-    stewards_out.write(",".join(OUT_STEWARD_FIELDS)+"\n")
+    writer = csv.writer(stewards_out, quoting=csv.QUOTE_MINIMAL)
+    writer.writerow(OUT_STEWARD_FIELDS)
 
     for steward in STEWARDS:
         _row_data = [ \
@@ -222,7 +223,7 @@ def write_stewards_csv():
             steward['publisher'], \
             steward['license'] \
             ]
-        stewards_out.write(','.join(_row_data)+"\n")
+        writer.writerow(_row_data)
     stewards_out.close()
 
     print "* Done writing stewards.csv"
@@ -230,7 +231,8 @@ def write_stewards_csv():
 def write_named_trails_csv():
     print "* Writing named_trails.csv"
     named_trails_out = open(os.getcwd() + "/output/named_trails.csv", "w")
-    named_trails_out.write('"id","name","segment_ids","description","part_of"\n')
+    writer = csv.writer(named_trails_out, quoting=csv.QUOTE_MINIMAL)
+    writer.writerow(["id","name","segment_ids","description","part_of"])
 
     for named_trail in NAMED_TRAILS:
         # LEAVE EMPTY TRAILS OUT OF THE named_trails.csv file
@@ -241,7 +243,7 @@ def write_named_trails_csv():
                 named_trail['name'], \
                 _segment_ids, \
                 '','']
-            named_trails_out.write(','.join(_row_data)+"\n")
+            writer.writerow(_row_data)
     named_trails_out.close()
     print "* Done writing named_trails.csv"
 
