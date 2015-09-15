@@ -264,7 +264,10 @@ def validate():
     # Check for empty trails
     empty_count = 0
     missing_count = 0
+
+    print "* Validating Trails "
     for trail in NAMED_TRAILS:
+        print "** Validating Trail " + str(trail['id'])
         if trail['id'] not in NAMED_TRAIL_SEGMENT_ID_MAP:
             print trail['id'] + " has no segments"
             empty_count = empty_count + 1
@@ -273,19 +276,37 @@ def validate():
             for id in segments:
                 if id not in TRAIL_SEGMENT_IDS:
                     missing_count = missing_count + 1
-                    print 'Missing trail segment : ' + str(id)
+                    print 'INVALID Missing trail segment : ' + str(id)
                 else:
                     print "Found trail segment " + str(id)
     print str(len(NAMED_TRAILS)) + " trails"
     print str(empty_count) + " empty trails"
     print str(missing_count) + " missing segments"
 
+    print("* Validating Trailheads")
+    # Check for empty trails
+    missing_th_segment_count = 0
+    for trailhead in TRAILHEADS:
+        print( "** Validating Trailhead " + str(trailhead['properties']['id']))
+        segments = trailhead['properties']['segment_ids'].split(';')
+        for id in segments:
+            if id not in TRAIL_SEGMENT_IDS:
+                missing_th_segment_count = missing_th_segment_count + 1
+                print 'INVALID: Missing trail segment : ' + str(id)
+            else:
+                print "Found trail segment " + str(id)
+    print str(len(TRAILHEADS)) + " trailheads"
+    print str(missing_th_segment_count) + " missing segments"
+
+    print("* Validating Trail Segments")
     # Check for trail segments without trails
     for segment in TRAIL_SEGMENTS:
         unused_count = 0
         if segment['properties']['id'] not in SEGMENT_ID_NAMED_TRAIL_MAP:
             unused_count = unused_count + 1
             print "Unused trail segment : " + segment['properties']['id']
+
+    #
 
     print str(len(TRAIL_SEGMENTS)) + " trail segments"
     print str(unused_count) + " unused trail segments"
