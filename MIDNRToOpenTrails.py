@@ -90,7 +90,7 @@ def parse_named_trails_csv():
             row['id'] = str(row['Code'])
             row['name'] = row['Name']
             row['segment_ids'] = ""
-            row['description'] = ""
+            row['description'] = row['Description']
             print "** Named Trail"
             print row
             NAMED_TRAIL_MAP[row['name']] = row['id']
@@ -242,7 +242,7 @@ def write_named_trails_csv():
                 str(named_trail['id']), \
                 named_trail['name'], \
                 _segment_ids, \
-                '','']
+                named_trail['description'],'']
             writer.writerow(_row_data)
     named_trails_out.close()
     print "* Done writing named_trails.csv"
