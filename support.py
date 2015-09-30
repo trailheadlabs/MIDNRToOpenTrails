@@ -2,6 +2,10 @@ import hashlib, collections, csv, os, sys, zipfile
 
 from zipfile import ZipFile
 
+from shapely.geometry import mapping, shape
+
+import geojson
+
 # http://www.lfd.uci.edu/~gohlke/pythonlibs/#pyproj
 import pyproj
 
@@ -72,3 +76,22 @@ def transform_multilinestring(multilinestring):
 
 def transform_coordinates(coordinates):
     return pyproj.transform(MIDNR, WGS84, coordinates[0], coordinates[1])
+
+def simplify_geojson(geojson,tolerance=1.0):
+    for feature in geojson.features:
+        s = shape(feature['geometry'])
+        feature['geometry']= s.simplify(tolerance)
+    return geojson
+
+def simplify_geojson_file(in_path,out_path,tolerance=1.0):
+    infile = open(os.getcwd() + in_path, mode='r')
+    geo = geojson.load(infile)
+    geo = simplify_geojson(geo,tolerance)
+    outfile=open(os.getcwd() + out_path, mode='w')
+    outfile.write(geojson.dumps(geo))
+
+def simplify_trail_segments():
+    simplify_geojson_file('/output/trail_segments.geojson','/output/trail_segments_simplified_001.geojson',0.001)
+    simplify_geojson_file('/output/trail_segments.geojson','/output/trail_segments_simplified_0001.geojson',0.0001)
+    simplify_geojson_file('/output/trail_segments.geojson','/output/trail_segments_simplified_00001.geojson',0.00001)
+

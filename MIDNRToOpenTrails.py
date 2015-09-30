@@ -337,6 +337,8 @@ if __name__ == "__main__":
 
     write_trailheads_geojson()
 
+    simplify_trail_segments()
+
     # Report on the quality of the data
     validate()
 
