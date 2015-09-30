@@ -90,7 +90,10 @@ def parse_named_trails_csv():
             row['id'] = str(row['Code'])
             row['name'] = row['Name']
             row['segment_ids'] = ""
-            row['description'] = row['Description']
+            if row.has_key('Description'):
+                row['description'] = row['Description']
+            else:
+                row['description'] = ''
             print "** Named Trail"
             print row
             NAMED_TRAIL_MAP[row['name']] = row['id']
@@ -209,7 +212,7 @@ def parse_trailheads():
 def write_stewards_csv():
     OUT_STEWARD_FIELDS = ['id', 'name', 'url', 'phone', 'address','publisher', 'license']
     print "* Writing stewards.csv"
-    stewards_out = open(os.getcwd() + "/output/stewards.csv", "w")
+    stewards_out = open(os.getcwd() + "/output/stewards.csv", "wb")
     writer = csv.writer(stewards_out, quoting=csv.QUOTE_MINIMAL)
     writer.writerow(OUT_STEWARD_FIELDS)
 
@@ -230,7 +233,7 @@ def write_stewards_csv():
 
 def write_named_trails_csv():
     print "* Writing named_trails.csv"
-    named_trails_out = open(os.getcwd() + "/output/named_trails.csv", "w")
+    named_trails_out = open(os.getcwd() + "/output/named_trails.csv", "wb")
     writer = csv.writer(named_trails_out, quoting=csv.QUOTE_MINIMAL)
     writer.writerow(["id","name","segment_ids","description","part_of"])
 
