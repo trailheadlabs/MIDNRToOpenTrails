@@ -18,12 +18,12 @@ What this script does.
 ========
 Order of operations
 
-# Unzips input files (stewards.xls, named_trails.xls, trailheads and trail_segments shapefiles)
-# Reads input files (into memory)
-# Builds OpenTrails compliant data structures in memory
-# Writes data structures to OpenTrails files (stewards.csv, named_trails.csv, trailheads.geojson, trail_segments.geojson)
-# Creates simplified versions of the trail_segments.geojson file, using the shapely simplify method (http://toblerity.org/shapely/manual.html#object.simplify)
-# Zips files into MT_DNR_OpenTrails.zip
+1. Unzips input files (stewards.xls, named_trails.xls, trailheads and trail_segments shapefiles)
+2. Reads input files (into memory)
+3. Builds OpenTrails compliant data structures in memory
+4. Writes data structures to OpenTrails files (stewards.csv, named_trails.csv, trailheads.geojson, trail_segments.geojson)
+5. Creates simplified versions of the trail_segments.geojson file, using the shapely simplify method (http://toblerity.org/shapely/manual.html#object.simplify)
+5. Zips files in output directory into MT_DNR_OpenTrails.zip
 
 Dependencies 
 ============
