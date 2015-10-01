@@ -42,6 +42,9 @@ TRAIL_SEGMENTS = []
 TRAIL_SEGMENT_IDS = []
 TRAILHEADS = []
 
+INPUT_DIR = os.getcwd() + "/input"
+UNZIPPED_INPUT_DIR = INPUT_DIR + "/unzipped"
+
 if not os.path.exists(os.getcwd()+'/output'):
     """
     Create a directory to hold the output
@@ -64,9 +67,9 @@ def xls_to_csv(ExcelFile, SheetIndex, CSVFile):
     csvfile.close()
 
 def parse_stewards_csv():
-    xls_to_csv("./input/stewards.xls",0,"./input/stewards.csv")
+    xls_to_csv(UNZIPPED_INPUT_DIR + "/stewards.xlsx",0,UNZIPPED_INPUT_DIR + "/stewards.csv")
     print "* Parsing stewards.csv"
-    with open(os.getcwd() + "/input/stewards.csv", mode='r') as infile:
+    with open(UNZIPPED_INPUT_DIR + "/stewards.csv", mode='r') as infile:
         reader = csv.DictReader(infile, STEWARD_FIELDS) #stewards.csv header
         reader.next()
         for row in reader:
@@ -79,19 +82,19 @@ def parse_stewards_csv():
     print "* Done parsing stewards.csv"
 
 def parse_named_trails_csv():
-    xls_to_csv("./input/named_trails.xls",0,"./input/named_trails.csv")
+    xls_to_csv(UNZIPPED_INPUT_DIR + "/named_trails.xlsx",0,UNZIPPED_INPUT_DIR + "/named_trails.csv")
     print "* Parsing named_trails.csv"
-    with open(os.getcwd() + "/input/named_trails.csv", mode='r') as infile:
-        reader = csv.DictReader(infile, ['OBJECTID','Code', 'Name']) # named_trails.csv header
+    with open(UNZIPPED_INPUT_DIR + "/named_trails.csv", mode='r') as infile:
+        reader = csv.DictReader(infile, ['ID','trail_name', 'Descriptio']) # named_trails.csv header
         reader.next() #skip header line
         for row in reader:
             NAMED_TRAILS.append(row)
         for row in NAMED_TRAILS:
-            row['id'] = str(row['Code'])
-            row['name'] = row['Name']
+            row['id'] = str(row['ID'])
+            row['name'] = row['trail_name']
             row['segment_ids'] = ""
-            if row.has_key('Description'):
-                row['description'] = row['Description']
+            if row.has_key('Descriptio'):
+                row['description'] = row['Descriptio']
             else:
                 row['description'] = ''
             print "** Named Trail"
@@ -105,7 +108,7 @@ def parse_named_trails_csv():
 def parse_trail_segments():
     print "* Parsing trail segments"
     # read the trails shapefile
-    reader = shapefile.Reader(os.getcwd()+'/input/trail_segments.shp')
+    reader = shapefile.Reader(UNZIPPED_INPUT_DIR + '/marquette_trail_segments.shp')
     fields = reader.fields[1:]
     field_names = [field[0].upper() for field in fields]
 
@@ -165,7 +168,7 @@ def parse_trail_segments():
 def parse_trailheads():
     print ("* Parsing trailheads")
     # read the trails shapefile
-    reader = shapefile.Reader(os.getcwd()+'/input/trailheads.shp')
+    reader = shapefile.Reader(UNZIPPED_INPUT_DIR+'/marquette_trailheads.shp')
     fields = reader.fields[1:]
     field_names = [field[0].upper() for field in fields]
 

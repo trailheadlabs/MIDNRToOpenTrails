@@ -25,6 +25,447 @@
     {
       "type": "Feature", 
       "properties": {
+        "id": "THD38854", 
+        "steward_id": "000001", 
+        "segment_ids": "TRL21191", 
+        "name": "Craig Lake State Park - Craig Lake Trail", 
+        "restrooms": "no", 
+        "drinkwater": "no", 
+        "parking": "yes", 
+        "kiosk": "no", 
+        "address": "46.5993, -88.1896"
+      }, 
+      "geometry": {
+        "type": "Point", 
+        "coordinates": [
+          -88.18963889334817, 
+          46.59932000352313
+        ]
+      }
+    }, 
+    {
+      "type": "Feature", 
+      "properties": {
+        "id": "THD38863", 
+        "steward_id": "000001", 
+        "segment_ids": "TRL21903;TRL21903", 
+        "name": "Porterfield Lake Motorcycle Trail", 
+        "restrooms": "no", 
+        "drinkwater": "no", 
+        "parking": "yes", 
+        "kiosk": "no", 
+        "address": "46.2568, -87.9527"
+      }, 
+      "geometry": {
+        "type": "Point", 
+        "coordinates": [
+          -87.95268287314369, 
+          46.25684924773568
+        ]
+      }
+    }, 
+    {
+      "type": "Feature", 
+      "properties": {
+        "id": "THD38455", 
+        "steward_id": "000001", 
+        "segment_ids": "TRL2248", 
+        "name": "Hiawatha Water Trail", 
+        "restrooms": "no", 
+        "drinkwater": "no", 
+        "parking": "yes", 
+        "kiosk": "no", 
+        "address": "46.8261, -87.7279"
+      }, 
+      "geometry": {
+        "type": "Point", 
+        "coordinates": [
+          -87.72787565153547, 
+          46.826120550385625
+        ]
+      }
+    }, 
+    {
+      "type": "Feature", 
+      "properties": {
+        "id": "THD21", 
+        "steward_id": "000008", 
+        "segment_ids": "TRL2248", 
+        "name": "Hiawatha Water Trail", 
+        "restrooms": "yes", 
+        "drinkwater": "no", 
+        "parking": "yes", 
+        "kiosk": "no", 
+        "address": "46.6365, -87.472"
+      }, 
+      "geometry": {
+        "type": "Point", 
+        "coordinates": [
+          -87.47205000033948, 
+          46.636500000156595
+        ]
+      }
+    }, 
+    {
+      "type": "Feature", 
+      "properties": {
+        "id": "THD22", 
+        "steward_id": "000000", 
+        "segment_ids": "TRL2248", 
+        "name": "Hiawatha Water Trail", 
+        "restrooms": "yes", 
+        "drinkwater": "no", 
+        "parking": "no", 
+        "kiosk": "no", 
+        "address": "46.6149, -87.4646"
+      }, 
+      "geometry": {
+        "type": "Point", 
+        "coordinates": [
+          -87.46456388931507, 
+          46.61489444412511
+        ]
+      }
+    }, 
+    {
+      "type": "Feature", 
+      "properties": {
+        "id": "THD23", 
+        "steward_id": "000008", 
+        "segment_ids": "TRL2248", 
+        "name": "Hiawatha Water Trail", 
+        "restrooms": "yes", 
+        "drinkwater": "yes", 
+        "parking": "yes", 
+        "kiosk": "no", 
+        "address": "46.586, -87.3859"
+      }, 
+      "geometry": {
+        "type": "Point", 
+        "coordinates": [
+          -87.38592500045108, 
+          46.58595833301006
+        ]
+      }
+    }, 
+    {
+      "type": "Feature", 
+      "properties": {
+        "id": "THD24", 
+        "steward_id": "000000", 
+        "segment_ids": "TRL2248", 
+        "name": "Hiawatha Water Trail", 
+        "restrooms": "yes", 
+        "drinkwater": "no", 
+        "parking": "yes", 
+        "kiosk": "no", 
+        "address": "46.5479, -87.3785"
+      }, 
+      "geometry": {
+        "type": "Point", 
+        "coordinates": [
+          -87.37850555589121, 
+          46.54792499980383
+        ]
+      }
+    }, 
+    {
+      "type": "Feature", 
+      "properties": {
+        "id": "THD25", 
+        "steward_id": "000008", 
+        "segment_ids": "TRL2248", 
+        "name": "Hiawatha Water Trail", 
+        "restrooms": "yes", 
+        "drinkwater": "yes", 
+        "parking": "yes", 
+        "kiosk": "yes", 
+        "address": "46.5436, -87.3837"
+      }, 
+      "geometry": {
+        "type": "Point", 
+        "coordinates": [
+          -87.38373055572379, 
+          46.543555555286694
+        ]
+      }
+    }, 
+    {
+      "type": "Feature", 
+      "properties": {
+        "id": "THD26", 
+        "steward_id": "000000", 
+        "segment_ids": "TRL2248", 
+        "name": "Hiawatha Water Trail", 
+        "restrooms": "yes", 
+        "drinkwater": "yes", 
+        "parking": "yes", 
+        "kiosk": "yes", 
+        "address": "46.5436, -87.3843"
+      }, 
+      "geometry": {
+        "type": "Point", 
+        "coordinates": [
+          -87.38433888899894, 
+          46.54357500034897
+        ]
+      }
+    }, 
+    {
+      "type": "Feature", 
+      "properties": {
+        "id": "THD27", 
+        "steward_id": "000000", 
+        "segment_ids": "TRL2248", 
+        "name": "Hiawatha Water Trail", 
+        "restrooms": "yes", 
+        "drinkwater": "no", 
+        "parking": "yes", 
+        "kiosk": "no", 
+        "address": "46.4963, -87.3487"
+      }, 
+      "geometry": {
+        "type": "Point", 
+        "coordinates": [
+          -87.34867499994282, 
+          46.49626666675231
+        ]
+      }
+    }, 
+    {
+      "type": "Feature", 
+      "properties": {
+        "id": "THD28", 
+        "steward_id": "000001", 
+        "segment_ids": "TRL2248", 
+        "name": "Hiawatha Water Trail", 
+        "restrooms": "yes", 
+        "drinkwater": "yes", 
+        "parking": "yes", 
+        "kiosk": "no", 
+        "address": "46.4892, -87.2216"
+      }, 
+      "geometry": {
+        "type": "Point", 
+        "coordinates": [
+          -87.22164444471615, 
+          46.48923333369074
+        ]
+      }
+    }, 
+    {
+      "type": "Feature", 
+      "properties": {
+        "id": "THD29", 
+        "steward_id": "000001", 
+        "segment_ids": "TRL2248", 
+        "name": "Hiawatha Water Trail", 
+        "restrooms": "yes", 
+        "drinkwater": "yes", 
+        "parking": "yes", 
+        "kiosk": "no", 
+        "address": "46.4939, -87.1261"
+      }, 
+      "geometry": {
+        "type": "Point", 
+        "coordinates": [
+          -87.12611388846334, 
+          46.49393888886712
+        ]
+      }
+    }, 
+    {
+      "type": "Feature", 
+      "properties": {
+        "id": "THD30", 
+        "steward_id": "000001", 
+        "segment_ids": "TRL2248", 
+        "name": "Hiawatha Water Trail", 
+        "restrooms": "no", 
+        "drinkwater": "no", 
+        "parking": "no", 
+        "kiosk": "no", 
+        "address": "46.5212, -87.0278"
+      }, 
+      "geometry": {
+        "type": "Point", 
+        "coordinates": [
+          -87.02777777785965, 
+          46.521219444818946
+        ]
+      }
+    }, 
+    {
+      "type": "Feature", 
+      "properties": {
+        "id": "THD38452", 
+        "steward_id": "000001", 
+        "segment_ids": "TRL21084", 
+        "name": "DNR-Harlow Lake Trails", 
+        "restrooms": "no", 
+        "drinkwater": "no", 
+        "parking": "yes", 
+        "kiosk": "no", 
+        "address": "46.6155, -87.4687"
+      }, 
+      "geometry": {
+        "type": "Point", 
+        "coordinates": [
+          -87.46870922029058, 
+          46.61548450884711
+        ]
+      }
+    }, 
+    {
+      "type": "Feature", 
+      "properties": {
+        "id": "THD38858", 
+        "steward_id": "000008", 
+        "segment_ids": "TRL21832", 
+        "name": "Fit Strip Trail", 
+        "restrooms": "no", 
+        "drinkwater": "no", 
+        "parking": "yes", 
+        "kiosk": "no", 
+        "address": "46.5479, -87.4101"
+      }, 
+      "geometry": {
+        "type": "Point", 
+        "coordinates": [
+          -87.4100564036571, 
+          46.54787504886534
+        ]
+      }
+    }, 
+    {
+      "type": "Feature", 
+      "properties": {
+        "id": "THD38456", 
+        "steward_id": "000003", 
+        "segment_ids": "TRL21567", 
+        "name": "Noque", 
+        "restrooms": "no", 
+        "drinkwater": "no", 
+        "parking": "yes", 
+        "kiosk": "no", 
+        "address": "46.7193, -87.5773"
+      }, 
+      "geometry": {
+        "type": "Point", 
+        "coordinates": [
+          -87.5773034039525, 
+          46.719284120326016
+        ]
+      }
+    }, 
+    {
+      "type": "Feature", 
+      "properties": {
+        "id": "THD38855", 
+        "steward_id": "000003", 
+        "segment_ids": "TRL21573", 
+        "name": "Noque", 
+        "restrooms": "no", 
+        "drinkwater": "no", 
+        "parking": "yes", 
+        "kiosk": "no", 
+        "address": "46.5986, -87.603"
+      }, 
+      "geometry": {
+        "type": "Point", 
+        "coordinates": [
+          -87.60299341937183, 
+          46.59855698912094
+        ]
+      }
+    }, 
+    {
+      "type": "Feature", 
+      "properties": {
+        "id": "THD38862", 
+        "steward_id": "000003", 
+        "segment_ids": "TRL21632;TRL21147", 
+        "name": "Noque", 
+        "restrooms": "no", 
+        "drinkwater": "no", 
+        "parking": "yes", 
+        "kiosk": "no", 
+        "address": "46.5835, -87.4793"
+      }, 
+      "geometry": {
+        "type": "Point", 
+        "coordinates": [
+          -87.47933070277067, 
+          46.583473705473516
+        ]
+      }
+    }, 
+    {
+      "type": "Feature", 
+      "properties": {
+        "id": "THD38454", 
+        "steward_id": "000008", 
+        "segment_ids": "TRL21001", 
+        "name": "Noquemanon Trail", 
+        "restrooms": "no", 
+        "drinkwater": "no", 
+        "parking": "yes", 
+        "kiosk": "no", 
+        "address": "46.8154, -87.7396"
+      }, 
+      "geometry": {
+        "type": "Point", 
+        "coordinates": [
+          -87.73958882852797, 
+          46.81539682435191
+        ]
+      }
+    }, 
+    {
+      "type": "Feature", 
+      "properties": {
+        "id": "THD38857", 
+        "steward_id": "000003", 
+        "segment_ids": "TRL21767", 
+        "name": "North Trails", 
+        "restrooms": "no", 
+        "drinkwater": "no", 
+        "parking": "yes", 
+        "kiosk": "no", 
+        "address": "46.5651, -87.4374"
+      }, 
+      "geometry": {
+        "type": "Point", 
+        "coordinates": [
+          -87.43740526366679, 
+          46.56506101573751
+        ]
+      }
+    }, 
+    {
+      "type": "Feature", 
+      "properties": {
+        "id": "THD38856", 
+        "steward_id": "000003", 
+        "segment_ids": "TRL21307", 
+        "name": "Tourist Park Trails", 
+        "restrooms": "no", 
+        "drinkwater": "no", 
+        "parking": "yes", 
+        "kiosk": "no", 
+        "address": "46.5726, -87.4139"
+      }, 
+      "geometry": {
+        "type": "Point", 
+        "coordinates": [
+          -87.4139141023815, 
+          46.57258307599905
+        ]
+      }
+    }, 
+    {
+      "type": "Feature", 
+      "properties": {
         "id": "THD8", 
         "steward_id": "000001", 
         "segment_ids": "TRL21954;TRL21960", 
@@ -154,7 +595,7 @@
         "id": "THD20", 
         "steward_id": "000009", 
         "segment_ids": "TRL21685", 
-        "name": "Little Presque Isle/Songbird", 
+        "name": "Little Presque Isle/DNR-Harlow Lake Trails - Song Bird Trail", 
         "restrooms": "no", 
         "drinkwater": "no", 
         "parking": "yes", 

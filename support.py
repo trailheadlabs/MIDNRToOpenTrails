@@ -21,7 +21,7 @@ def unzip_input(file):
     zfile = zipfile.ZipFile(os.getcwd()+'/input/'+file+'.zip')
     for name in zfile.namelist():
         (dirname, filename) = os.path.split(name)
-        zfile.extract(name, os.getcwd()+'/input/')
+        zfile.extract(name, os.getcwd()+'/input/unzipped/')
     zfile.close()
 
 def zip_output():
