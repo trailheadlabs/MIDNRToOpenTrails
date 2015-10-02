@@ -30,7 +30,7 @@ from support import *
 
 # http://www.codeforamerica.org/specifications/trails/spec.html
 
-STEWARD_FIELDS = ['OBJECTID', 'name', 'id', 'url', 'address', 'publisher', 'license', 'phone' ]
+STEWARD_FIELDS = ['name', 'id', 'url', 'address', 'publisher', 'license', 'phone' ]
 STEWARDS = []
 STEWARD_MAP = {}
 NAMED_TRAILS = []
@@ -56,8 +56,8 @@ if not os.path.exists(os.getcwd()+'/output'):
 def xls_to_csv(ExcelFile, SheetIndex, CSVFile):
     workbook = xlrd.open_workbook(ExcelFile)
     worksheet = workbook.sheet_by_index(SheetIndex)
-    csvfile = open(CSVFile, 'wb')
-    wr = csv.writer(csvfile, quoting=csv.QUOTE_ALL)
+    csvfile = open(CSVFile, 'w')
+    wr = csv.writer(csvfile, quoting=csv.QUOTE_ALL, lineterminator='\n')
 
     for rownum in xrange(worksheet.nrows):
         wr.writerow(
@@ -215,8 +215,8 @@ def parse_trailheads():
 def write_stewards_csv():
     OUT_STEWARD_FIELDS = ['id', 'name', 'url', 'phone', 'address','publisher', 'license']
     print "* Writing stewards.csv"
-    stewards_out = open(os.getcwd() + "/output/stewards.csv", "wb")
-    writer = csv.writer(stewards_out, quoting=csv.QUOTE_MINIMAL)
+    stewards_out = open(os.getcwd() + "/output/stewards.csv", "w")
+    writer = csv.writer(stewards_out, quoting=csv.QUOTE_MINIMAL, lineterminator='\n')
     writer.writerow(OUT_STEWARD_FIELDS)
 
     for steward in STEWARDS:
@@ -236,8 +236,8 @@ def write_stewards_csv():
 
 def write_named_trails_csv():
     print "* Writing named_trails.csv"
-    named_trails_out = open(os.getcwd() + "/output/named_trails.csv", "wb")
-    writer = csv.writer(named_trails_out, quoting=csv.QUOTE_MINIMAL)
+    named_trails_out = open(os.getcwd() + "/output/named_trails.csv", "w")
+    writer = csv.writer(named_trails_out, quoting=csv.QUOTE_MINIMAL, lineterminator='\n')
     writer.writerow(["id","name","segment_ids","description","part_of"])
 
     for named_trail in NAMED_TRAILS:
