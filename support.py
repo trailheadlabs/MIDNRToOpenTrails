@@ -2,7 +2,7 @@ import hashlib, collections, csv, os, sys, zipfile
 
 from zipfile import ZipFile
 
-from shapely.geometry import mapping, shape
+from rdp import rdp
 
 import geojson
 
@@ -77,10 +77,25 @@ def transform_multilinestring(multilinestring):
 def transform_coordinates(coordinates):
     return pyproj.transform(MIDNR, WGS84, coordinates[0], coordinates[1])
 
+
+def round_me(coord):
+    return [round(coord[0],7),round(coord[1],7)]
+
+def simplify_coords(coords,tolerance):
+    new_coords = rdp(coords,epsilon=tolerance)
+    new_coords = map(round_me,new_coords)
+    return new_coords
+
 def simplify_geojson(geojson,tolerance=1.0):
+    print('* Simplifying geojson at tolerance ' + str(tolerance))
     for feature in geojson.features:
-        s = shape(feature['geometry'])
-        feature['geometry']= s.simplify(tolerance)
+        if feature['geometry']['type'] == 'LineString':
+            feature['geometry']['coordinates'] = simplify_coords(feature['geometry']['coordinates'],tolerance)
+        if feature['geometry']['type'] == 'MultiLineString':
+            new_coords = []
+            for coords in feature['geometry']['coordinates']:
+                new_coords.append(simplify_coords(coords,tolerance))
+            feature['geometry']['coordinates'] = new_coords
     return geojson
 
 def simplify_geojson_file(in_path,out_path,tolerance=1.0):
