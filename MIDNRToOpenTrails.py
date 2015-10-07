@@ -10,6 +10,8 @@
 
 # This is the OpenTrails conversion script for MI DNR to OpenTrails
 
+# http://www.codeforamerica.org/specifications/trails/spec.html
+
 # Huge thank you to Ben Sainsbury (formerly Oregon Metro) for the initial work done on this script.
 
 # http://www.lfd.uci.edu/~gohlke/pythonlibs/#pyshp
@@ -28,18 +30,34 @@ import csv
 
 from support import *
 
-# http://www.codeforamerica.org/specifications/trails/spec.html
+INPUT_ZIP_FILENAME = 'marquest_pilot_open_data.zip'
 
-STEWARD_FIELDS = ['name', 'id', 'url', 'address', 'publisher', 'license', 'phone' ]
+TRAIL_SEGMENT_INPUT_SHAPEFILE_NAME = 'trail_segments.shp'
+TRAILHEAD_INPUT_SHAPEFILE_NAME = 'trailheads.shp'
+
+STEWARDS_INPUT_FILENAME = 'stewards.xls'
+
+STEWARDS_INPUT_COLUMNS = ['ObjectID,','name', 'id', 'url', 'address', 'publisher', 'license', 'phone' ]
+STEWARDS_OUTPUT_COLUMNS = ['id', 'name', 'url', 'phone', 'address','publisher', 'license']
+
+NAMED_TRAILS_INPUT_FILENAME = 'named_trails.xls'
+
+NAMED_TRAILS_INPUT_COLUMNS = ['ObjectID','Code', 'Name', 'Descriptio']
+NAMED_TRAILS_OUTPUT_COLUMNS = ["id","name","segment_ids","description","part_of"]
+
 STEWARDS = []
 STEWARD_MAP = {}
+
 NAMED_TRAILS = []
 NAMED_TRAIL_IDS = []
 NAMED_TRAIL_MAP = {}
 NAMED_TRAIL_SEGMENT_ID_MAP = {}
+
 SEGMENT_ID_NAMED_TRAIL_MAP = {}
+
 TRAIL_SEGMENTS = []
 TRAIL_SEGMENT_IDS = []
+
 TRAILHEADS = []
 
 INPUT_DIR = os.getcwd() + "/input"
@@ -67,10 +85,10 @@ def xls_to_csv(ExcelFile, SheetIndex, CSVFile):
     csvfile.close()
 
 def parse_stewards_csv():
-    xls_to_csv(UNZIPPED_INPUT_DIR + "/stewards.xlsx",0,UNZIPPED_INPUT_DIR + "/stewards.csv")
+    xls_to_csv(UNZIPPED_INPUT_DIR + STEWARDS_INPUT_FILENAME,0,UNZIPPED_INPUT_DIR + "/stewards.csv")
     print "* Parsing stewards.csv"
     with open(UNZIPPED_INPUT_DIR + "/stewards.csv", mode='r') as infile:
-        reader = csv.DictReader(infile, STEWARD_FIELDS) #stewards.csv header
+        reader = csv.DictReader(infile, STEWARDS_INPUT_COLUMNS) #stewards.csv header
         reader.next()
         for row in reader:
             STEWARDS.append(row)
@@ -82,10 +100,10 @@ def parse_stewards_csv():
     print "* Done parsing stewards.csv"
 
 def parse_named_trails_csv():
-    xls_to_csv(UNZIPPED_INPUT_DIR + "/named_trails.xlsx",0,UNZIPPED_INPUT_DIR + "/named_trails.csv")
+    xls_to_csv(UNZIPPED_INPUT_DIR + NAMED_TRAILS_INPUT_FILENAME,0,UNZIPPED_INPUT_DIR + "/named_trails.csv")
     print "* Parsing named_trails.csv"
     with open(UNZIPPED_INPUT_DIR + "/named_trails.csv", mode='r') as infile:
-        reader = csv.DictReader(infile, ['ID','trail_name', 'Descriptio']) # named_trails.csv header
+        reader = csv.DictReader(infile, NAMED_TRAILS_INPUT_COLUMNS) # named_trails.csv header
         reader.next() #skip header line
         for row in reader:
             NAMED_TRAILS.append(row)
@@ -108,7 +126,7 @@ def parse_named_trails_csv():
 def parse_trail_segments():
     print "* Parsing trail segments"
     # read the trails shapefile
-    reader = shapefile.Reader(UNZIPPED_INPUT_DIR + '/marquette_trail_segments.shp')
+    reader = shapefile.Reader(UNZIPPED_INPUT_DIR + TRAIL_SEGMENT_INPUT_SHAPEFILE_NAME)
     fields = reader.fields[1:]
     field_names = [field[0].upper() for field in fields]
 
@@ -168,7 +186,7 @@ def parse_trail_segments():
 def parse_trailheads():
     print ("* Parsing trailheads")
     # read the trails shapefile
-    reader = shapefile.Reader(UNZIPPED_INPUT_DIR+'/marquette_trailheads.shp')
+    reader = shapefile.Reader(UNZIPPED_INPUT_DIR + TRAILHEAD_INPUT_SHAPEFILE_NAME)
     fields = reader.fields[1:]
     field_names = [field[0].upper() for field in fields]
 
@@ -213,11 +231,10 @@ def parse_trailheads():
 ### WRITING FUNCTIONS
 
 def write_stewards_csv():
-    OUT_STEWARD_FIELDS = ['id', 'name', 'url', 'phone', 'address','publisher', 'license']
     print "* Writing stewards.csv"
     stewards_out = open(os.getcwd() + "/output/stewards.csv", "w")
     writer = csv.writer(stewards_out, quoting=csv.QUOTE_MINIMAL, lineterminator='\n')
-    writer.writerow(OUT_STEWARD_FIELDS)
+    writer.writerow(STEWARDS_OUTPUT_COLUMNS)
 
     for steward in STEWARDS:
         _row_data = [ \
@@ -238,7 +255,7 @@ def write_named_trails_csv():
     print "* Writing named_trails.csv"
     named_trails_out = open(os.getcwd() + "/output/named_trails.csv", "w")
     writer = csv.writer(named_trails_out, quoting=csv.QUOTE_MINIMAL, lineterminator='\n')
-    writer.writerow(["id","name","segment_ids","description","part_of"])
+    writer.writerow(NAMED_TRAILS_OUTPUT_COLUMNS)
 
     for named_trail in NAMED_TRAILS:
         # LEAVE EMPTY TRAILS OUT OF THE named_trails.csv file
@@ -320,7 +337,7 @@ def validate():
 if __name__ == "__main__":
 
     # unzip the input zip file
-    unzip_input("marquette_pilot_open_data")
+    unzip_input(INPUT_ZIP_FILENAME)
 
     # PARSE PARSE PARSE
     parse_stewards_csv()

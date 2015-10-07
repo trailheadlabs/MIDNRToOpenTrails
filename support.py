@@ -18,7 +18,7 @@ MOTOR_VEHICLE_FIELDS = ['ORV','ATV','Motorbike','MCCCT','Snowmobile']
 
 def unzip_input(file):
     print "* Unzipping" + file
-    zfile = zipfile.ZipFile(os.getcwd()+'/input/'+file+'.zip')
+    zfile = zipfile.ZipFile(os.getcwd()+'/input/'+file)
     for name in zfile.namelist():
         (dirname, filename) = os.path.split(name)
         zfile.extract(name, os.getcwd()+'/input/unzipped/')
