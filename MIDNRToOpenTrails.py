@@ -30,9 +30,9 @@ import csv
 
 from support import *
 
-INPUT_ZIP_FILENAME = 'marquest_pilot_open_data.zip'
+INPUT_ZIP_FILENAME = 'marquette_pilot_open_data.zip'
 
-TRAIL_SEGMENT_INPUT_SHAPEFILE_NAME = 'trail_segments.shp'
+TRAIL_SEGMENT_INPUT_SHAPEFILE_NAME = 'marquette_trail_segments.shp'
 TRAILHEAD_INPUT_SHAPEFILE_NAME = 'trailheads.shp'
 
 STEWARDS_INPUT_FILENAME = 'stewards.xls'
@@ -85,7 +85,7 @@ def xls_to_csv(ExcelFile, SheetIndex, CSVFile):
     csvfile.close()
 
 def parse_stewards_csv():
-    xls_to_csv(UNZIPPED_INPUT_DIR + STEWARDS_INPUT_FILENAME,0,UNZIPPED_INPUT_DIR + "/stewards.csv")
+    xls_to_csv(UNZIPPED_INPUT_DIR + '/' + STEWARDS_INPUT_FILENAME,0,UNZIPPED_INPUT_DIR + "/stewards.csv")
     print "* Parsing stewards.csv"
     with open(UNZIPPED_INPUT_DIR + "/stewards.csv", mode='r') as infile:
         reader = csv.DictReader(infile, STEWARDS_INPUT_COLUMNS) #stewards.csv header
@@ -100,7 +100,7 @@ def parse_stewards_csv():
     print "* Done parsing stewards.csv"
 
 def parse_named_trails_csv():
-    xls_to_csv(UNZIPPED_INPUT_DIR + NAMED_TRAILS_INPUT_FILENAME,0,UNZIPPED_INPUT_DIR + "/named_trails.csv")
+    xls_to_csv(UNZIPPED_INPUT_DIR + '/' + NAMED_TRAILS_INPUT_FILENAME,0,UNZIPPED_INPUT_DIR + "/named_trails.csv")
     print "* Parsing named_trails.csv"
     with open(UNZIPPED_INPUT_DIR + "/named_trails.csv", mode='r') as infile:
         reader = csv.DictReader(infile, NAMED_TRAILS_INPUT_COLUMNS) # named_trails.csv header
@@ -126,7 +126,7 @@ def parse_named_trails_csv():
 def parse_trail_segments():
     print "* Parsing trail segments"
     # read the trails shapefile
-    reader = shapefile.Reader(UNZIPPED_INPUT_DIR + TRAIL_SEGMENT_INPUT_SHAPEFILE_NAME)
+    reader = shapefile.Reader(UNZIPPED_INPUT_DIR + '/' + TRAIL_SEGMENT_INPUT_SHAPEFILE_NAME)
     fields = reader.fields[1:]
     field_names = [field[0].upper() for field in fields]
 
@@ -186,7 +186,7 @@ def parse_trail_segments():
 def parse_trailheads():
     print ("* Parsing trailheads")
     # read the trails shapefile
-    reader = shapefile.Reader(UNZIPPED_INPUT_DIR + TRAILHEAD_INPUT_SHAPEFILE_NAME)
+    reader = shapefile.Reader(UNZIPPED_INPUT_DIR + '/' + TRAILHEAD_INPUT_SHAPEFILE_NAME)
     fields = reader.fields[1:]
     field_names = [field[0].upper() for field in fields]
 
@@ -340,28 +340,29 @@ if __name__ == "__main__":
     unzip_input(INPUT_ZIP_FILENAME)
 
     # PARSE PARSE PARSE
-    parse_stewards_csv()
+#    parse_stewards_csv()
 
-    parse_named_trails_csv()
+#    parse_named_trails_csv()
 
     parse_trail_segments()
 
-    parse_trailheads()
+ #   parse_trailheads()
 
     # WRITE WRITE WRITE
-    write_stewards_csv()
+  #  write_stewards_csv()
 
-    write_named_trails_csv()
+   # write_named_trails_csv()
 
     write_trail_segments_geojson()
 
-    write_trailheads_geojson()
+
+    # write_trailheads_geojson()
 
     simplify_trail_segments()
 
     # Report on the quality of the data
-    validate()
+    #validate()
 
     # zip the individual OpenTrails files up
-    zip_output()
+    # zip_output()
     print '* Process complete'
