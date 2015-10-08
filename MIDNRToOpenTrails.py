@@ -32,7 +32,7 @@ from support import *
 
 INPUT_ZIP_FILENAME = 'marquette_pilot_open_data.zip'
 
-TRAIL_SEGMENT_INPUT_SHAPEFILE_NAME = 'marquette_trail_segments.shp'
+TRAIL_SEGMENT_INPUT_SHAPEFILE_NAME = 'trail_segments.shp'
 TRAILHEAD_INPUT_SHAPEFILE_NAME = 'trailheads.shp'
 
 STEWARDS_INPUT_FILENAME = 'stewards.xls'
@@ -340,29 +340,29 @@ if __name__ == "__main__":
     unzip_input(INPUT_ZIP_FILENAME)
 
     # PARSE PARSE PARSE
-#    parse_stewards_csv()
+    parse_stewards_csv()
 
-#    parse_named_trails_csv()
+    parse_named_trails_csv()
 
     parse_trail_segments()
 
- #   parse_trailheads()
+    parse_trailheads()
 
     # WRITE WRITE WRITE
-  #  write_stewards_csv()
+    write_stewards_csv()
 
-   # write_named_trails_csv()
+    write_named_trails_csv()
 
     write_trail_segments_geojson()
 
 
-    # write_trailheads_geojson()
+    write_trailheads_geojson()
 
     simplify_trail_segments()
 
     # Report on the quality of the data
-    #validate()
+    validate()
 
     # zip the individual OpenTrails files up
-    # zip_output()
+    zip_output()
     print '* Process complete'
