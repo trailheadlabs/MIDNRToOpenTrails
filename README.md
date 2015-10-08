@@ -22,7 +22,7 @@ Order of operations
 2. Reads input files (into memory)
 3. Builds OpenTrails compliant data structures in memory
 4. Writes data structures to OpenTrails files (stewards.csv, named_trails.csv, trailheads.geojson, trail_segments.geojson)
-5. Creates simplified versions of the trail_segments.geojson file, using the shapely simplify method (http://toblerity.org/shapely/manual.html#object.simplify)
+5. Creates simplified versions of the trail_segments.geojson file, using the rdp package.
 5. Zips files in output directory into MT_DNR_OpenTrails.zip
 
 Dependencies 
