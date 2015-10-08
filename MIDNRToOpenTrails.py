@@ -35,14 +35,14 @@ INPUT_ZIP_FILENAME = 'marquette_pilot_open_data.zip'
 TRAIL_SEGMENT_INPUT_SHAPEFILE_NAME = 'trail_segments.shp'
 TRAILHEAD_INPUT_SHAPEFILE_NAME = 'trailheads.shp'
 
-STEWARDS_INPUT_FILENAME = 'stewards.xls'
+STEWARDS_INPUT_FILENAME = 'stewards.xlsx'
 
-STEWARDS_INPUT_COLUMNS = ['ObjectID,','name', 'id', 'url', 'address', 'publisher', 'license', 'phone' ]
+STEWARDS_INPUT_COLUMNS = ['OBJECTID,','name', 'id', 'url', 'address', 'publisher', 'license', 'phone' ]
 STEWARDS_OUTPUT_COLUMNS = ['id', 'name', 'url', 'phone', 'address','publisher', 'license']
 
 NAMED_TRAILS_INPUT_FILENAME = 'named_trails.xls'
 
-NAMED_TRAILS_INPUT_COLUMNS = ['ObjectID','Code', 'Name', 'Descriptio']
+NAMED_TRAILS_INPUT_COLUMNS = ['Code', 'Name', 'Descriptio']
 NAMED_TRAILS_OUTPUT_COLUMNS = ["id","name","segment_ids","description","part_of"]
 
 STEWARDS = []
@@ -108,11 +108,11 @@ def parse_named_trails_csv():
         for row in reader:
             NAMED_TRAILS.append(row)
         for row in NAMED_TRAILS:
-            row['id'] = str(row['ID'])
-            row['name'] = row['trail_name']
+            row['id'] = str(row['Code'])
+            row['name'] = row['Name']
             row['segment_ids'] = ""
-            if row.has_key('Descriptio'):
-                row['description'] = row['Descriptio']
+            if row.has_key('Description'):
+                row['description'] = row['Description']
             else:
                 row['description'] = ''
             print "** Named Trail"
