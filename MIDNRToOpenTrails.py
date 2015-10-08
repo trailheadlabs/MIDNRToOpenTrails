@@ -30,19 +30,19 @@ import csv
 
 from support import *
 
-INPUT_ZIP_FILENAME = 'marquette_pilot_open_data.zip'
+INPUT_ZIP_FILENAME = 'Marquette_pilot_open_data.zip'
 
 TRAIL_SEGMENT_INPUT_SHAPEFILE_NAME = 'trail_segments.shp'
 TRAILHEAD_INPUT_SHAPEFILE_NAME = 'trailheads.shp'
 
-STEWARDS_INPUT_FILENAME = 'stewards.xlsx'
+STEWARDS_INPUT_FILENAME = 'stewards.xls'
 
 STEWARDS_INPUT_COLUMNS = ['OBJECTID,','name', 'id', 'url', 'address', 'publisher', 'license', 'phone' ]
 STEWARDS_OUTPUT_COLUMNS = ['id', 'name', 'url', 'phone', 'address','publisher', 'license']
 
 NAMED_TRAILS_INPUT_FILENAME = 'named_trails.xls'
 
-NAMED_TRAILS_INPUT_COLUMNS = ['Code', 'Name', 'Descriptio']
+NAMED_TRAILS_INPUT_COLUMNS = ['OBJECTID','Code', 'Name', 'Description']
 NAMED_TRAILS_OUTPUT_COLUMNS = ["id","name","segment_ids","description","part_of"]
 
 STEWARDS = []
