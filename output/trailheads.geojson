@@ -17,8 +17,302 @@
       "geometry": {
         "type": "Point", 
         "coordinates": [
-          -87.48498034048586, 
-          46.229590884804146
+          -87.48498033999994, 
+          46.22959088500005
+        ]
+      }
+    }, 
+    {
+      "type": "Feature", 
+      "properties": {
+        "id": "THD38866", 
+        "steward_id": "000009", 
+        "segment_ids": "TRL21535", 
+        "name": "North Country Trail", 
+        "restrooms": "yes", 
+        "drinkwater": "no", 
+        "parking": "yes", 
+        "kiosk": "no", 
+        "address": "46.6421, -88.0466"
+      }, 
+      "geometry": {
+        "type": "Point", 
+        "coordinates": [
+          -88.04660833699995, 
+          46.64211196700006
+        ]
+      }
+    }, 
+    {
+      "type": "Feature", 
+      "properties": {
+        "id": "THD38867", 
+        "steward_id": "000009", 
+        "segment_ids": "TRL21106", 
+        "name": "North Country Trail", 
+        "restrooms": "no", 
+        "drinkwater": "no", 
+        "parking": "yes", 
+        "kiosk": "no", 
+        "address": "46.661, -87.8986"
+      }, 
+      "geometry": {
+        "type": "Point", 
+        "coordinates": [
+          -87.89856932499998, 
+          46.66102819300005
+        ]
+      }
+    }, 
+    {
+      "type": "Feature", 
+      "properties": {
+        "id": "THD38868", 
+        "steward_id": "000009", 
+        "segment_ids": "TRL21106", 
+        "name": "North Country Trail", 
+        "restrooms": "no", 
+        "drinkwater": "no", 
+        "parking": "yes", 
+        "kiosk": "no", 
+        "address": "46.6717, -87.8163"
+      }, 
+      "geometry": {
+        "type": "Point", 
+        "coordinates": [
+          -87.81627539899995, 
+          46.67173155800003
+        ]
+      }
+    }, 
+    {
+      "type": "Feature", 
+      "properties": {
+        "id": "THD38869", 
+        "steward_id": "000009", 
+        "segment_ids": "TRL21109", 
+        "name": "North Country Trail", 
+        "restrooms": "no", 
+        "drinkwater": "no", 
+        "parking": "yes", 
+        "kiosk": "no", 
+        "address": "46.6414, -87.6648"
+      }, 
+      "geometry": {
+        "type": "Point", 
+        "coordinates": [
+          -87.66479533999996, 
+          46.64144156200007
+        ]
+      }
+    }, 
+    {
+      "type": "Feature", 
+      "properties": {
+        "id": "THD38870", 
+        "steward_id": "000001", 
+        "segment_ids": "TRL24067", 
+        "name": "North Country Trail", 
+        "restrooms": "no", 
+        "drinkwater": "no", 
+        "parking": "yes", 
+        "kiosk": "no", 
+        "address": "46.6604, -87.5669"
+      }, 
+      "geometry": {
+        "type": "Point", 
+        "coordinates": [
+          -87.56692526599994, 
+          46.660380104000076
+        ]
+      }
+    }, 
+    {
+      "type": "Feature", 
+      "properties": {
+        "id": "THD38871", 
+        "steward_id": "000001", 
+        "segment_ids": "TRL21110", 
+        "name": "North Country Trail", 
+        "restrooms": "no", 
+        "drinkwater": "no", 
+        "parking": "yes", 
+        "kiosk": "no", 
+        "address": "46.674, -87.543"
+      }, 
+      "geometry": {
+        "type": "Point", 
+        "coordinates": [
+          -87.54301521699995, 
+          46.67404864100007
+        ]
+      }
+    }, 
+    {
+      "type": "Feature", 
+      "properties": {
+        "id": "THD38878", 
+        "steward_id": "000001", 
+        "segment_ids": "TRL21054", 
+        "name": "North Country Trail", 
+        "restrooms": "no", 
+        "drinkwater": "no", 
+        "parking": "yes", 
+        "kiosk": "no", 
+        "address": "46.4849, -87.1231"
+      }, 
+      "geometry": {
+        "type": "Point", 
+        "coordinates": [
+          -87.12309084999998, 
+          46.48490014400005
+        ]
+      }
+    }, 
+    {
+      "type": "Feature", 
+      "properties": {
+        "id": "THD38879", 
+        "steward_id": "000001", 
+        "segment_ids": "TRL24072", 
+        "name": "North Country Trail", 
+        "restrooms": "yes", 
+        "drinkwater": "yes", 
+        "parking": "yes", 
+        "kiosk": "yes", 
+        "address": "46.3821, -87.0775"
+      }, 
+      "geometry": {
+        "type": "Point", 
+        "coordinates": [
+          -87.07750718799997, 
+          46.38209006900007
+        ]
+      }
+    }, 
+    {
+      "type": "Feature", 
+      "properties": {
+        "id": "THD38872", 
+        "steward_id": "000001", 
+        "segment_ids": "TRL21652", 
+        "name": "North Country Trail", 
+        "restrooms": "no", 
+        "drinkwater": "no", 
+        "parking": "yes", 
+        "kiosk": "no", 
+        "address": "46.6438, -87.506"
+      }, 
+      "geometry": {
+        "type": "Point", 
+        "coordinates": [
+          -87.50600733199997, 
+          46.643838610000046
+        ]
+      }
+    }, 
+    {
+      "type": "Feature", 
+      "properties": {
+        "id": "THD38873", 
+        "steward_id": "000001", 
+        "segment_ids": "TRL21127", 
+        "name": "North Country Trail", 
+        "restrooms": "no", 
+        "drinkwater": "no", 
+        "parking": "yes", 
+        "kiosk": "no", 
+        "address": "46.6065, -87.4695"
+      }, 
+      "geometry": {
+        "type": "Point", 
+        "coordinates": [
+          -87.46953735399995, 
+          46.60652007400006
+        ]
+      }
+    }, 
+    {
+      "type": "Feature", 
+      "properties": {
+        "id": "THD38874", 
+        "steward_id": "000009", 
+        "segment_ids": "TRL21147", 
+        "name": "North Country Trail", 
+        "restrooms": "no", 
+        "drinkwater": "no", 
+        "parking": "yes", 
+        "kiosk": "no", 
+        "address": "46.5824, -87.4794"
+      }, 
+      "geometry": {
+        "type": "Point", 
+        "coordinates": [
+          -87.47941522699995, 
+          46.582440097000074
+        ]
+      }
+    }, 
+    {
+      "type": "Feature", 
+      "properties": {
+        "id": "THD38875", 
+        "steward_id": "000001", 
+        "segment_ids": "TRL21937", 
+        "name": "North Country Trail", 
+        "restrooms": "no", 
+        "drinkwater": "no", 
+        "parking": "yes", 
+        "kiosk": "no", 
+        "address": "46.4849, -87.2409"
+      }, 
+      "geometry": {
+        "type": "Point", 
+        "coordinates": [
+          -87.24088297899993, 
+          46.48487865200008
+        ]
+      }
+    }, 
+    {
+      "type": "Feature", 
+      "properties": {
+        "id": "THD38876", 
+        "steward_id": "000001", 
+        "segment_ids": "TRL21054", 
+        "name": "North Country Trail", 
+        "restrooms": "no", 
+        "drinkwater": "no", 
+        "parking": "yes", 
+        "kiosk": "no", 
+        "address": "46.4802, -87.2161"
+      }, 
+      "geometry": {
+        "type": "Point", 
+        "coordinates": [
+          -87.21609509399997, 
+          46.48018863000004
+        ]
+      }
+    }, 
+    {
+      "type": "Feature", 
+      "properties": {
+        "id": "THD38877", 
+        "steward_id": "000001", 
+        "segment_ids": "TRL21054", 
+        "name": "North Country Trail", 
+        "restrooms": "no", 
+        "drinkwater": "no", 
+        "parking": "yes", 
+        "kiosk": "no", 
+        "address": "46.4893, -87.1517"
+      }, 
+      "geometry": {
+        "type": "Point", 
+        "coordinates": [
+          -87.15171722899998, 
+          46.48930008000008
         ]
       }
     }, 
@@ -38,8 +332,8 @@
       "geometry": {
         "type": "Point", 
         "coordinates": [
-          -88.18964536458687, 
-          46.59932857734705
+          -88.18964536499999, 
+          46.59932857700005
         ]
       }
     }, 
@@ -59,8 +353,8 @@
       "geometry": {
         "type": "Point", 
         "coordinates": [
-          -87.95268922559703, 
-          46.256857785854095
+          -87.95268922599996, 
+          46.25685778600007
         ]
       }
     }, 
@@ -80,8 +374,8 @@
       "geometry": {
         "type": "Point", 
         "coordinates": [
-          -87.72788201175764, 
-          46.826129187622016
+          -87.72788201199995, 
+          46.826129188000046
         ]
       }
     }, 
@@ -101,8 +395,8 @@
       "geometry": {
         "type": "Point", 
         "coordinates": [
-          -87.47205625580041, 
-          46.63650862572305
+          -87.47205625599997, 
+          46.63650862600008
         ]
       }
     }, 
@@ -122,8 +416,8 @@
       "geometry": {
         "type": "Point", 
         "coordinates": [
-          -87.46457013955835, 
-          46.61490306695135
+          -87.46457013999999, 
+          46.61490306700006
         ]
       }
     }, 
@@ -143,8 +437,8 @@
       "geometry": {
         "type": "Point", 
         "coordinates": [
-          -87.38593122252587, 
-          46.58596695653175
+          -87.38593122299994, 
+          46.585966957000046
         ]
       }
     }, 
@@ -164,8 +458,8 @@
       "geometry": {
         "type": "Point", 
         "coordinates": [
-          -87.37851177058963, 
-          46.547933618115785
+          -87.37851177099998, 
+          46.54793361800006
         ]
       }
     }, 
@@ -185,8 +479,8 @@
       "geometry": {
         "type": "Point", 
         "coordinates": [
-          -87.38373677145225, 
-          46.54356417261339
+          -87.38373677099997, 
+          46.54356417300005
         ]
       }
     }, 
@@ -206,8 +500,8 @@
       "geometry": {
         "type": "Point", 
         "coordinates": [
-          -87.38434510491783, 
-          46.54358361763994
+          -87.38434510499997, 
+          46.54358361800007
         ]
       }
     }, 
@@ -227,8 +521,8 @@
       "geometry": {
         "type": "Point", 
         "coordinates": [
-          -87.34868119854761, 
-          46.496275279228286
+          -87.34868119899994, 
+          46.49627527900003
         ]
       }
     }, 
@@ -248,8 +542,8 @@
       "geometry": {
         "type": "Point", 
         "coordinates": [
-          -87.22165060315064, 
-          46.4892419531547
+          -87.22165060299994, 
+          46.48924195300003
         ]
       }
     }, 
@@ -269,8 +563,8 @@
       "geometry": {
         "type": "Point", 
         "coordinates": [
-          -87.12612001798333, 
-          46.49394751506784
+          -87.12612001799994, 
+          46.493947515000066
         ]
       }
     }, 
@@ -290,8 +584,8 @@
       "geometry": {
         "type": "Point", 
         "coordinates": [
-          -87.02778388054719, 
-          46.521228081311534
+          -87.02778388099995, 
+          46.52122808100006
         ]
       }
     }, 
@@ -311,8 +605,8 @@
       "geometry": {
         "type": "Point", 
         "coordinates": [
-          -87.4687154718932, 
-          46.615493131496734
+          -87.46871547199999, 
+          46.61549313100005
         ]
       }
     }, 
@@ -332,8 +626,8 @@
       "geometry": {
         "type": "Point", 
         "coordinates": [
-          -87.41006262809029, 
-          46.54788366516373
+          -87.41006262799993, 
+          46.54788366500003
         ]
       }
     }, 
@@ -353,8 +647,8 @@
       "geometry": {
         "type": "Point", 
         "coordinates": [
-          -87.57730970310618, 
-          46.71929275145567
+          -87.57730970299997, 
+          46.71929275100007
         ]
       }
     }, 
@@ -374,8 +668,8 @@
       "geometry": {
         "type": "Point", 
         "coordinates": [
-          -87.60299971012986, 
-          46.59856560066662
+          -87.60299970999995, 
+          46.598565601000075
         ]
       }
     }, 
@@ -395,8 +689,8 @@
       "geometry": {
         "type": "Point", 
         "coordinates": [
-          -87.4793369533534, 
-          46.583482322673675
+          -87.47933695299999, 
+          46.583482323000055
         ]
       }
     }, 
@@ -416,8 +710,8 @@
       "geometry": {
         "type": "Point", 
         "coordinates": [
-          -87.73959519089586, 
-          46.815405459249384
+          -87.73959519099998, 
+          46.81540545900003
         ]
       }
     }, 
@@ -437,8 +731,8 @@
       "geometry": {
         "type": "Point", 
         "coordinates": [
-          -87.43741149884114, 
-          46.5650696328622
+          -87.43741149899996, 
+          46.565069633000064
         ]
       }
     }, 
@@ -458,8 +752,29 @@
       "geometry": {
         "type": "Point", 
         "coordinates": [
-          -87.4139203313102, 
-          46.572591695742496
+          -87.41392033099999, 
+          46.572591696000075
+        ]
+      }
+    }, 
+    {
+      "type": "Feature", 
+      "properties": {
+        "id": "THD38865", 
+        "steward_id": "000008", 
+        "segment_ids": "TRL21988", 
+        "name": "Pioneer Loop/DNR-Harlow Lake Trails - Sugarloaf", 
+        "restrooms": "no", 
+        "drinkwater": "no", 
+        "parking": "yes", 
+        "kiosk": "no", 
+        "address": "46.5231, -87.422"
+      }, 
+      "geometry": {
+        "type": "Point", 
+        "coordinates": [
+          -87.42199812199999, 
+          46.52313075900003
         ]
       }
     }, 
@@ -479,8 +794,8 @@
       "geometry": {
         "type": "Point", 
         "coordinates": [
-          -87.42435788452399, 
-          46.46078656512693
+          -87.42435788499995, 
+          46.460786565000035
         ]
       }
     }, 
@@ -500,8 +815,8 @@
       "geometry": {
         "type": "Point", 
         "coordinates": [
-          -87.412212657303, 
-          46.440869604755676
+          -87.41221265699994, 
+          46.440869605000046
         ]
       }
     }, 
@@ -521,8 +836,8 @@
       "geometry": {
         "type": "Point", 
         "coordinates": [
-          -87.4231761752652, 
-          46.44931069715217
+          -87.42317617499998, 
+          46.449310697000044
         ]
       }
     }, 
@@ -542,8 +857,8 @@
       "geometry": {
         "type": "Point", 
         "coordinates": [
-          -87.46786144110607, 
-          46.63402181180057
+          -87.46786144099997, 
+          46.63402181200007
         ]
       }
     }, 
@@ -563,8 +878,8 @@
       "geometry": {
         "type": "Point", 
         "coordinates": [
-          -87.45982862775986, 
-          46.60302326444272
+          -87.45982862799997, 
+          46.60302326400006
         ]
       }
     }, 
@@ -584,8 +899,8 @@
       "geometry": {
         "type": "Point", 
         "coordinates": [
-          -87.46761838421999, 
-          46.61470204452332
+          -87.46761838399999, 
+          46.61470204500006
         ]
       }
     }, 
@@ -605,8 +920,29 @@
       "geometry": {
         "type": "Point", 
         "coordinates": [
-          -87.47407938325549, 
-          46.63311654674478
+          -87.47407938299995, 
+          46.63311654700004
+        ]
+      }
+    }, 
+    {
+      "type": "Feature", 
+      "properties": {
+        "id": "THD38864", 
+        "steward_id": "000008", 
+        "segment_ids": "TRL21971", 
+        "name": "Harlow Farms Connector Trail", 
+        "restrooms": "no", 
+        "drinkwater": "no", 
+        "parking": "yes", 
+        "kiosk": "no", 
+        "address": "46.5348, -87.4367"
+      }, 
+      "geometry": {
+        "type": "Point", 
+        "coordinates": [
+          -87.43674142199995, 
+          46.53484525300007
         ]
       }
     }
