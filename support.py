@@ -10,7 +10,7 @@ import geojson
 import pyproj
 
 WGS84 = pyproj.Proj("+init=EPSG:4326") # LatLon with WGS84 datum used for geojson
-MIDNR = pyproj.Proj("+init=EPSG:3078", preserve_units=True) # datum used by Michigan
+MIDNR = pyproj.Proj("+init=EPSG:4326", preserve_units=True) # datum used by Michigan
 
 MOTOR_VEHICLE_FIELDS = ['ORV','ATV','Motorbike','MCCCT','Snowmobile']
 
