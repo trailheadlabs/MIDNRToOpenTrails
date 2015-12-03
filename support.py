@@ -26,10 +26,10 @@ def unzip_input(file):
 
 def zip_output():
     with ZipFile('./output/MI_DNR_OpenTrails.zip', 'w', zipfile.ZIP_DEFLATED) as myzip:
-        myzip.write('./output/named_trails.csv')
-        myzip.write('./output/stewards.csv')
-        myzip.write('./output/trailheads.geojson')
-        myzip.write('./output/trail_segments.geojson')
+        myzip.write('./output/named_trails.csv','named_trails.csv')
+        myzip.write('./output/stewards.csv','stewards.csv')
+        myzip.write('./output/trailheads.geojson','trailheads.geojson')
+        myzip.write('./output/trail_segments.geojson','trail_segments.geojson')
 
 def get_steward_id(steward_name):
     result = None
@@ -108,4 +108,3 @@ def simplify_trail_segments():
     simplify_geojson_file('/output/trail_segments.geojson','/output/trail_segments_simplified_001.geojson',0.001)
     simplify_geojson_file('/output/trail_segments.geojson','/output/trail_segments_simplified_0001.geojson',0.0001)
     simplify_geojson_file('/output/trail_segments.geojson','/output/trail_segments_simplified_00001.geojson',0.00001)
-
